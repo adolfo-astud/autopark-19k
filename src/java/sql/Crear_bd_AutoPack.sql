@@ -3,8 +3,7 @@ SQLyog - Free MySQL GUI v5.11
 Host - 5.6.17 : Database - autopack
 *********************************************************************
 Server version : 5.6.17
-*/
-
+*/
 
 SET NAMES utf8;
 
@@ -13,6 +12,25 @@ SET SQL_MODE='';
 create database if not exists `autopack`;
 
 USE `autopack`;
+
+/*Table structure for table `boucher` */
+
+DROP TABLE IF EXISTS `boucher`;
+
+CREATE TABLE `boucher` (
+  `n_boucher` bigint(20) NOT NULL AUTO_INCREMENT,
+  `op_de_envio` varchar(50) NOT NULL,
+  `forma_de_pago` varchar(50) NOT NULL,
+  `total_boleta` bigint(20) NOT NULL,
+  `rut_cliente` bigint(20) NOT NULL,
+  PRIMARY KEY (`n_boucher`),
+  KEY `FK_boucher` (`rut_cliente`),
+  CONSTRAINT `boucher_ibfk_1` FOREIGN KEY (`rut_cliente`) REFERENCES `cliente` (`rut`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
+
+/*Data for the table `boucher` */
+
+insert into `boucher` (`n_boucher`,`op_de_envio`,`forma_de_pago`,`total_boleta`,`rut_cliente`) values (1,'Correo Electronico','Transferencia',1500,18057300),(2,'Direccion Particular','Pago en Linea',2000,15644658),(3,'Correo Electronico','Orden de Compra',2000,18326977);
 
 /*Table structure for table `cliente` */
 
@@ -45,25 +63,6 @@ CREATE TABLE `estacionamiento` (
 /*Data for the table `estacionamiento` */
 
 insert into `estacionamiento` (`id_estacinamiento`,`descripcion`,`monto`,`coordenados`) values (1,'Plaza Civica - Valparaiso',2000,'asd'),(2,'Mirador del Sol - Quilpué',3000,'dasd'),(3,'Plaza de Armas - Santiago',500,'65465413'),(4,'Plaza de Armas - Valparaiso',1500,'asdsad');
-
-/*Table structure for table `boucher` */
-
-DROP TABLE IF EXISTS `boucher`;
-
-CREATE TABLE `boucher` (
-  `n_boucher` bigint(20) NOT NULL AUTO_INCREMENT,
-  `op_de_envio` varchar(50) NOT NULL,
-  `forma_de_pago` varchar(50) NOT NULL,
-  `total_boleta` bigint(20) NOT NULL,
-  `rut_cliente` bigint(20) NOT NULL,
-  PRIMARY KEY (`n_boucher`),
-  KEY `FK_boucher` (`rut_cliente`),
-  CONSTRAINT `boucher_ibfk_1` FOREIGN KEY (`rut_cliente`) REFERENCES `cliente` (`rut`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
-
-/*Data for the table `boucher` */
-
-insert into `boucher` (`n_boucher`,`op_de_envio`,`forma_de_pago`,`total_boleta`,`rut_cliente`) values (1,'Correo Electronico','Transferencia',1500,18057300),(2,'Direccion Particular','Pago en Linea',2000,15644658),(3,'Correo Electronico','Orden de Compra',2000,18326977);
 
 /*Table structure for table `ticket` */
 
