@@ -10,9 +10,9 @@ SET NAMES utf8;
 
 SET SQL_MODE='';
 
-create database if not exists `autopack`;
+create database if not exists `autopark`;
 
-USE `autopack`;
+USE `autopark`;
 
 /*Table structure for table `cliente` */
 
@@ -35,16 +35,16 @@ insert into `cliente` (`rut`,`nombre`,`telefono`,`e-mail`) values (15644658,'Die
 DROP TABLE IF EXISTS `estacionamiento`;
 
 CREATE TABLE `estacionamiento` (
-  `id_estacinamiento` bigint(20) NOT NULL AUTO_INCREMENT,
+  `id_estacionamiento` bigint(20) NOT NULL AUTO_INCREMENT,
   `descripcion` varchar(50) NOT NULL,
   `monto` bigint(20) NOT NULL,
-  `coordenados` varchar(200) NOT NULL,
-  PRIMARY KEY (`id_estacinamiento`)
+  `coordenadas` varchar(200) NOT NULL,
+  PRIMARY KEY (`id_estacionamiento`)
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
 
 /*Data for the table `estacionamiento` */
 
-insert into `estacionamiento` (`id_estacinamiento`,`descripcion`,`monto`,`coordenados`) values (1,'Plaza Civica - Valparaiso',2000,'asd'),(2,'Mirador del Sol - Quilpué',3000,'dasd'),(3,'Plaza de Armas - Santiago',500,'65465413'),(4,'Plaza de Armas - Valparaiso',1500,'asdsad');
+insert into `estacionamiento` (`id_estacionamiento`,`descripcion`,`monto`,`coordenadas`) values (1,'Plaza Civica - Valparaiso',2000,'asd'),(2,'Mirador del Sol - Quilpué',3000,'dasd'),(3,'Plaza de Armas - Santiago',500,'65465413'),(4,'Plaza de Armas - Valparaiso',1500,'asdsad');
 
 /*Table structure for table `boucher` */
 
@@ -77,7 +77,7 @@ CREATE TABLE `ticket` (
   KEY `FK_ticket` (`n_boucher`),
   KEY `id_estacionamiento` (`id_estacionamiento`),
   CONSTRAINT `ticket_ibfk_2` FOREIGN KEY (`n_boucher`) REFERENCES `boucher` (`n_boucher`),
-  CONSTRAINT `ticket_ibfk_1` FOREIGN KEY (`id_estacionamiento`) REFERENCES `estacionamiento` (`id_estacinamiento`)
+  CONSTRAINT `ticket_ibfk_1` FOREIGN KEY (`id_estacionamiento`) REFERENCES `estacionamiento` (`id_estacionamiento`)
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
 
 /*Data for the table `ticket` */
