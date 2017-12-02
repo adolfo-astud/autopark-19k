@@ -104,4 +104,30 @@ public class EstacionamientoDaoImp implements EstacionamientoDao {
         return false;
     }
 
+    @Override
+    public EstacionamientoDto getEstacionamiento(int id_estacionamiento) {
+        String query = "SELECT * FROM estacionamiento where id_estacionamiento = ?";
+        try (PreparedStatement buscar = Conexion.getConexion().prepareStatement(query)) {
+            buscar.setInt(1,id_estacionamiento);
+            try (ResultSet rs = buscar.executeQuery()) {
+                if (rs.next()) {
+                    EstacionamientoDto estacionamiento = new EstacionamientoDto();
+                    
+                    estacionamiento.setId(id_estacionamiento);
+                    estacionamiento.setDescripcion(rs.getString("descripcion"));
+                    estacionamiento.setMonto(rs.getInt("monto"));
+                    estacionamiento.setLatitud((rs.getFloat("latitud") + 0));
+                    estacionamiento.setLongitud((rs.getFloat("longitud") + 0));
+
+                    return estacionamiento;
+                }
+            }
+        } catch (SQLException ex) {
+            System.out.println("Problema listando estacionamientos: " + ex.getMessage());
+            Logger.getLogger(EstacionamientoDaoImp.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return null;
+    }
+
 }

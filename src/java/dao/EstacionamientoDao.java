@@ -9,4 +9,5 @@ import java.util.List;
  */
 public interface EstacionamientoDao extends BaseDao<EstacionamientoDto>{
     public List<EstacionamientoDto> listar();
+    public EstacionamientoDto getEstacionamiento(int n_ticket);
 }
