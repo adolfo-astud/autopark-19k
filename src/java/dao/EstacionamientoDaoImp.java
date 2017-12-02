@@ -123,7 +123,7 @@ public class EstacionamientoDaoImp implements EstacionamientoDao {
                 }
             }
         } catch (SQLException ex) {
-            System.out.println("Problema listando estacionamientos: " + ex.getMessage());
+            System.out.println("Problema Obteninedo estacionamiento: " + ex.getMessage());
             Logger.getLogger(EstacionamientoDaoImp.class.getName()).log(Level.SEVERE, null, ex);
         }
 

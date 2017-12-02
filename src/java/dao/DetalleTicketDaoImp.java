@@ -24,12 +24,42 @@ public class DetalleTicketDaoImp implements DetalleTicketDao{
 
     @Override
     public boolean agregar(DetalleTicketDto dto) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        String query = "INSERT INTO ticket(id_estacionamiento,n_boucher) values(?,?)";
+        try (Connection conexion = Conexion.getConexion()) {
+            try (PreparedStatement insert = conexion.prepareStatement(query)) {
+                
+                insert.setInt(1, dto.getId_estacionamiento());
+                insert.setInt(2, dto.getN_boucher());
+
+                if (insert.executeUpdate() > 0) {
+                    return true;
+                }
+            }
+        } catch (SQLException ex) {
+            System.out.println("Problema insertando ticket: " + ex.getMessage());
+            Logger.getLogger(EstacionamientoDaoImp.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return false;
     }
 
     @Override
     public boolean eliminar(DetalleTicketDto dto) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        String query = "DELETE FROM ticket WHERE n_ticket = ?";
+        try (Connection conexion = Conexion.getConexion()) {
+            try (PreparedStatement delete = conexion.prepareStatement(query)) {
+                delete.setInt(1, dto.getN_ticket());
+
+                if (delete.executeUpdate() > 0) {
+                    return true;
+                }
+            }
+        } catch (SQLException ex) {
+            System.out.println("Problema eliminando ticket: " + ex.getMessage());
+            Logger.getLogger(EstacionamientoDaoImp.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return false;
     }
 
     @Override
@@ -58,7 +88,7 @@ public class DetalleTicketDaoImp implements DetalleTicketDao{
                 return tickets;
             }
         } catch (SQLException ex) {
-            System.out.println("Problema listando estacionamientos: " + ex.getMessage());
+            System.out.println("Problema listando tickets: " + ex.getMessage());
             Logger.getLogger(EstacionamientoDaoImp.class.getName()).log(Level.SEVERE, null, ex);
         }
 

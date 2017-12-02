@@ -6,11 +6,15 @@
 package dao;
 
 import dto.ClienteDto;
+import java.util.List;
 
 /**
  *
  * @author Serph
  */
 public interface ClienteDao extends BaseDao<ClienteDto>{
+    
+    public List<String> listarRut();
+    public ClienteDto getCliente(int rut);
     
 }

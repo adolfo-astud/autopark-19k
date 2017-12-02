@@ -5,10 +5,16 @@
  */
 package dao;
 
+import dto.BoletaDto;
+import java.util.List;
+
 /**
  *
  * @author Serph
  */
-public interface BoletaDao extends BaseDao<BoletaDao>{
+public interface BoletaDao extends BaseDao<BoletaDto>{
+    
+    public List<BoletaDto> listarPorRut(int rut);
+    public String descripcionBoleta(int n_boucher);
     
 }
