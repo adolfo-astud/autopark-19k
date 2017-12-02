@@ -11,7 +11,7 @@
 <html>
     <head>
         <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-        <title>AutoPark - P?gina Principal</title>
+        <title>AutoPark - Pagina Principal</title>
         <style type="text/css">
             html,body,#map_canvas {
                 height:100%;
@@ -340,10 +340,6 @@
                     return function () {
                         for (var i = 0; i < markers.length; i++) {
                             markers[i].set("labelClass", "");
-                            if (markers[i].get("id") == "4") {
-                                markers[i].set("labelClass", "active");
-                            }
-
                         }
 
                         // set the icon for the clicked marker
