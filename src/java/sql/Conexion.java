@@ -7,7 +7,7 @@ public class Conexion {
         Connection connection = null;
         try {
            String driverClassName = "com.mysql.jdbc.Driver";
-           String driverUrl="jdbc:mysql://localhost/el_don_muerto_sano";
+           String driverUrl="jdbc:mysql://localhost/autopark";
            Class.forName(driverClassName);
            connection = DriverManager.getConnection(driverUrl, "root","");
         }catch (Exception e) {

@@ -25,7 +25,8 @@ public class EstacionamientoDaoImp implements EstacionamientoDao {
                     estacionamiento.setId(rs.getInt("id_estacionamiento"));
                     estacionamiento.setDescripcion(rs.getString("descripcion"));
                     estacionamiento.setMonto(rs.getInt("monto"));
-                    estacionamiento.setCoordenadas(rs.getString("coordenadas"));
+                    estacionamiento.setLatitud((rs.getFloat("latitud") + 0));
+                    estacionamiento.setLongitud((rs.getFloat("longitud") + 0));
 
                     estacionamientos.add(estacionamiento);
                 }
@@ -47,7 +48,7 @@ public class EstacionamientoDaoImp implements EstacionamientoDao {
             try (PreparedStatement insert = conexion.prepareStatement(query)) {
                 insert.setString(1, dto.getDescripcion());
                 insert.setInt(2, dto.getMonto());
-                insert.setString(3, dto.getCoordenadas());
+                insert.setFloat(3, dto.getLatitud());
 
                 if (insert.executeUpdate() > 0) {
                     return true;
@@ -88,7 +89,7 @@ public class EstacionamientoDaoImp implements EstacionamientoDao {
             try (PreparedStatement update = conexion.prepareStatement(query)) {
                 update.setString(1, dto.getDescripcion());
                 update.setInt(2, dto.getMonto());
-                update.setString(3, dto.getCoordenadas());
+                //update.setString(3, dto.getCoordenadas());
                 update.setInt(4, dto.getId());
 
                 if (update.executeUpdate() > 0) {

@@ -38,13 +38,18 @@ CREATE TABLE `estacionamiento` (
   `id_estacionamiento` bigint(20) NOT NULL AUTO_INCREMENT,
   `descripcion` varchar(50) NOT NULL,
   `monto` bigint(20) NOT NULL,
-  `coordenadas` varchar(200) NOT NULL,
+  `latitud` DECIMAL(10, 8) NOT NULL,
+  `longitud` DECIMAL(11, 8) NOT NULL,
   PRIMARY KEY (`id_estacionamiento`)
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
 
 /*Data for the table `estacionamiento` */
 
-insert into `estacionamiento` (`id_estacionamiento`,`descripcion`,`monto`,`coordenadas`) values (1,'Plaza Civica - Valparaiso',2000,'asd'),(2,'Mirador del Sol - Quilpué',3000,'dasd'),(3,'Plaza de Armas - Santiago',500,'65465413'),(4,'Plaza de Armas - Valparaiso',1500,'asdsad');
+insert into `estacionamiento` (`id_estacionamiento`,`descripcion`,`monto`,`latitud`,`longitud`) values 
+    (1,'Plaza de Armas',2000,-33.435224, -70.649893),
+    (2,'Teatro Municipal',3000,-33.440453,-70.647411),
+    (3,'Patio Centro',500,-33.441919,-70.651274),
+    (4,'Plaza Festival',1500,-33.436314,-70.652057);
 
 /*Table structure for table `boucher` */
 

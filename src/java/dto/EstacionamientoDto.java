@@ -10,16 +10,19 @@ package dto;
  * @author CETECOM
  */
 public class EstacionamientoDto {
+
     private int id;
     private String descripcion;
     private int monto;
-    private String coordenadas;
+    private float latitud;
+    private float longitud;
 
-    public EstacionamientoDto(int id, String descripcion, int monto, String coordenadas) {
+    public EstacionamientoDto(int id, String descripcion, int monto, float latitud, float longitud) {
         this.id = id;
         this.descripcion = descripcion;
         this.monto = monto;
-        this.coordenadas = coordenadas;
+        this.latitud = latitud;
+        this.longitud = longitud;
     }
 
     public EstacionamientoDto() {
@@ -49,17 +52,20 @@ public class EstacionamientoDto {
         this.monto = monto;
     }
 
-    public String getCoordenadas() {
-        return coordenadas;
+    public float getLatitud() {
+        return latitud;
     }
 
-    public void setCoordenadas(String coordenadas) {
-        this.coordenadas = coordenadas;
+    public void setLatitud(float latitud) {
+        this.latitud = latitud;
     }
 
-    @Override
-    public String toString() {
-        return "dtoEstacionamiento{" + "id=" + id + ", descripcion=" + descripcion + ", monto=" + monto + ", coordenadas=" + coordenadas + '}';
+    public float getLongitud() {
+        return longitud;
+    }
+
+    public void setLongitud(float longitud) {
+        this.longitud = longitud;
     }
 
     @Override
@@ -86,4 +92,5 @@ public class EstacionamientoDto {
         }
         return true;
     }
+
 }
