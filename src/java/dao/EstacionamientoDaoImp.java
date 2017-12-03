@@ -43,12 +43,13 @@ public class EstacionamientoDaoImp implements EstacionamientoDao {
 
     @Override
     public boolean agregar(EstacionamientoDto dto) {
-        String query = "INSERT INTO estacionamiento(descripcion,monto,coordenadas) values(?,?,?)";
+        String query = "INSERT INTO estacionamiento(descripcion,monto,latitud, longitud) values(?,?,?,?)";
         try (Connection conexion = Conexion.getConexion()) {
             try (PreparedStatement insert = conexion.prepareStatement(query)) {
                 insert.setString(1, dto.getDescripcion());
                 insert.setInt(2, dto.getMonto());
                 insert.setFloat(3, dto.getLatitud());
+                insert.setFloat(4, dto.getLongitud());
 
                 if (insert.executeUpdate() > 0) {
                     return true;
@@ -83,14 +84,15 @@ public class EstacionamientoDaoImp implements EstacionamientoDao {
 
     @Override
     public boolean modificar(EstacionamientoDto dto) {
-        String query = "UPDATE estacionamiento set descripcion = ?, monto = ?, coordenadas = ? "
+        String query = "UPDATE estacionamiento set descripcion = ?, monto = ?, latitud = ? , longitud = ? "
                 + "WHERE id_estacionamiento = ?";
         try (Connection conexion = Conexion.getConexion()) {
             try (PreparedStatement update = conexion.prepareStatement(query)) {
                 update.setString(1, dto.getDescripcion());
                 update.setInt(2, dto.getMonto());
-                //update.setString(3, dto.getCoordenadas());
-                update.setInt(4, dto.getId());
+                update.setFloat(3, dto.getLatitud());
+                update.setFloat(4, dto.getLongitud());
+                update.setInt(5, dto.getId());
 
                 if (update.executeUpdate() > 0) {
                     return true;
