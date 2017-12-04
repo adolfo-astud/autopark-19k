@@ -41,7 +41,7 @@ public class AgregarTicket extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
             HttpSession session = request.getSession();
-            if (session.getAttribute("cliente") != null && ((ClienteDto)session.getAttribute("cliente")).getRut() != Integer.parseInt(request.getParameter("txtRut"))) {
+            if (((ClienteDto) session.getAttribute("cliente")) == null) {
                 ClienteDto cliente = new ClienteDto();
                 cliente.setRut(Integer.parseInt(request.getParameter("txtRut")));
                 cliente.setNombre(request.getParameter("txtNombre"));
@@ -49,25 +49,22 @@ public class AgregarTicket extends HttpServlet {
                 cliente.setEmail(request.getParameter("txtEmail"));
 
                 new ClienteDaoImp().agregar(cliente);
+                session.setAttribute("cliente", cliente);
+
+                BoletaDto boleta = new BoletaDto();
+                boleta.setForma_de_pago("temp");
+                boleta.setOp_de_envio("temp");
+                boleta.setRut_cliente(Integer.parseInt(request.getParameter("txtRut")));
+                boleta.setTotal_boleta(0);
+                new BoletaDaoImp().agregar(boleta);
             }
-            
-            BoletaDto boleta = new BoletaDto();
-            boleta.setForma_de_pago("temp");
-            boleta.setOp_de_envio("temp");
-            boleta.setRut_cliente(Integer.parseInt(request.getParameter("txtRut")));
-            boleta.setTotal_boleta(0);
-            
-            new BoletaDaoImp().agregar(boleta);
 
             DetalleTicketDto ticket = new DetalleTicketDto();
             ticket.setId_estacionamiento(Integer.parseInt(request.getParameter("estacionamiento")));
             ticket.setN_boucher(new BoletaDaoImp().getUltimaBoleta());
-            
+
             new DetalleTicketDaoImp().agregar(ticket);
-            
-            
-            
-            
+
             request.getRequestDispatcher("pages/PaginaPrincipal.jsp").forward(request, response);
         }
     }

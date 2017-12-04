@@ -38,9 +38,10 @@
                 </div>
                 <div id="datos-pago">
                     <div id="est_select">
+                        Nombre: ${sessionScope.cliente.getNombre()}
                         <p>Haz click en un estacionamiento para agregar ticket.</p>
-                        <form action="/autopark-19k/AgregarTicket" action="POST">
-                            <input type="hidden" class="form-control" name="txtRut" placeholder="Rut (sin DV)">
+                        <form action="/autopark-19k/AgregarTicket" method="POST">
+                            <input type="hidden" class="form-control" name="txtRut" placeholder="Rut (sin DV)" value="${sessionScope.cliente.getRut()}">
                             <input type="hidden" class="form-control" name="txtNombre" placeholder="Nombre">
                             <input type="hidden" class="form-control" name="txtTelefono" placeholder="Teléfono">
                             <input type="hidden" class="form-control" name="txtEmail" placeholder="E-mail">
@@ -48,8 +49,8 @@
                                 <p class="est">
                                     <input type="hidden" class="lat" value="${estacionamiento.getLatitud()}" />
                                     <input type="hidden" class="lng" value="${estacionamiento.getLongitud()}" />
-                                    <input name="estacionamiento" class="addTicketchk" id="ticket_est_${estacionamiento.getId()}" type="radio" value="${estacionamiento.getId()}" />
-                                    <label onclick="this.form.submit()" id="label_${estacionamiento.getId()}" class="addTicket" for="ticket_est_${estacionamiento.getId()}">${estacionamiento.getDescripcion()}</label>
+                                    <input onclick="this.form.submit()" name="estacionamiento" class="addTicketchk" id="ticket_est_${estacionamiento.getId()}" type="radio" value="${estacionamiento.getId()}" />
+                                    <label id="label_${estacionamiento.getId()}" class="addTicket" for="ticket_est_${estacionamiento.getId()}">${estacionamiento.getDescripcion()}</label>
                                     <span class="add">+</span>
                                 </p>
                             </c:forEach>
@@ -81,7 +82,10 @@
             var markers = [];
             var map;
             $(document).ready(function () {
-
+                if (${sessionScope.cliente != null}) {
+                    $("#datos-personales").hide();
+                    $("#datos-pago").show();
+                }
                 var styledMapType = new google.maps.StyledMapType(
                         [
                             {
