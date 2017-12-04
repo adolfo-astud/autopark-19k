@@ -10,5 +10,5 @@ package dto;
  * @author CETECOM
  */
 public class NewClass {
-    
+    private int test;
 }
