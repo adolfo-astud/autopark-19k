@@ -7,4 +7,6 @@ public class NewClass {
     
     private String prueba;
     private String k;
+    
+    private boolean k19;
 }
