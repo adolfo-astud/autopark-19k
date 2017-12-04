@@ -4,305 +4,90 @@
     Author     : adoha
 --%>
 
-<%@ page language="java" contentType="text/html; charset=EUC-KR" pageEncoding="EUC-KR"%>
+<%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <jsp:useBean id="estacionamientos" class="dao.EstacionamientoDaoImp" />
 <!DOCTYPE html>
 <html>
     <head>
         <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-        <title>AutoPark - Pagina Principal</title>
-        <style type="text/css">
-            html,body,#map_canvas {
-                height:100%;
-                margin:0;
-            }
+        <link rel="stylesheet" href="/autopark-19k/css/map.css">
+        <link rel="stylesheet" href="/autopark-19k/css/pagoTickets.css">
 
-            .tip {
-                color:black;
-                background-color:#3366ff;
-                border-radius:3px;
-                padding:7px 7px 7px 30px;
-                text-align:center;
-                font-size: 13px;
-                color:white;
-                background-image: url('http://www.willowsigns.com/images/products/parking-icon-reflective-sign-450x450mm-RdXH.png');
-                background-size: auto 20px;
-                background-position: 5px 5px;
-                background-repeat: no-repeat;
-                box-shadow: 5px 5px 5px #0009;
-                margin: 0px 10px 10px 0;
-                position: relative;
-                white-space: nowrap;
-            }
-
-            .tip:after {
-                top: 100%;
-                left: 50%;
-                border: solid transparent;
-                content:" ";
-                height: 0;
-                width: 0;
-                position: absolute;
-                pointer-events: none;
-                border-color: rgba(255, 255, 255, 0);
-                border-top-color: #3366ff;
-                border-width: 10px;
-                margin-left: -10px;
-            }
-
-            .active .tip {
-                background-color:#009966;
-            }
-
-            .active .tip:after {
-                border-top-color: #009966;
-            }
-        </style>
-        <script
-            src="https://code.jquery.com/jquery-3.2.1.min.js"
-            integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
-        crossorigin="anonymous"></script>
-        <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDWReh5q1uQVH-bmpTKXFJXeAroCCuFJ80&callback=initMap"></script>
+        <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDWReh5q1uQVH-bmpTKXFJXeAroCCuFJ80"></script>
         <script type="text/javascript" src="https://cdn.sobekrepository.org/includes/gmaps-markerwithlabel/1.9.1/gmaps-markerwithlabel-1.9.1.min.js"></script>
-
+        <title>AutoPark - Pagina Principal</title>
     </head>
     <body>
+        <jsp:include page="/pages/mainMenu.jsp" />
+        <div id="pago-tickets" class="right-container">
+            <div class="container-title">
+                <h4><span class="blue">Pago</span> de <span class="orange">Tickets</span></h4>
+            </div>
+            <div class="container-content">
+                <div id="datos-personales">
+                    <form id="pago-tickets-form" onSubmit="return preventSubmit(this.submited, event)">
+                        <p>Antes de continuar, por favor, ingresa tus datos:</p>
+                        <p><input type="number" class="form-control" name="temp_txtRut" placeholder="Rut (sin DV)"></p>
+                        <p><input  type="text" class="form-control" name="temp_txtNombre" placeholder="Nombre"></p>
+                        <p><input  type="number" class="form-control" name="temp_txtTelefono" placeholder="Teléfono"></p>
+                        <p><input type="text" class="form-control" name="temp_txtEmail" placeholder="E-mail"></p>
+                        <button id="continuar" onclick="this.form.submited = this.value;" value="continuar" type="submit" class="btn btn-primary btn-block">Continuar</button>
+                    </form>
+                </div>
+                <div id="datos-pago">
+                    <div id="est_select">
+                        <p>Haz click en un estacionamiento para agregar ticket.</p>
+                        <form>
+                            <input type="hidden" class="form-control" name="txtRut" placeholder="Rut (sin DV)">
+                            <input type="hidden" class="form-control" name="txtNombre" placeholder="Nombre">
+                            <input type="hidden" class="form-control" name="txtTelefono" placeholder="Teléfono">
+                            <input type="hidden" class="form-control" name="txtEmail" placeholder="E-mail">
+                            <c:forEach var="estacionamiento" items="${estacionamientos.listar()}">
+                                <p class="est">
+                                    <input type="hidden" class="lat" value="${estacionamiento.getLatitud()}" />
+                                    <input type="hidden" class="lng" value="${estacionamiento.getLongitud()}" />
+                                    <input name="estacionamiento" class="addTicketchk" id="ticket_est_${estacionamiento.getId()}" type="radio" value="${estacionamiento.getId()}" />
+                                    <label onclick="this.form.submit()" id="label_${estacionamiento.getId()}"class="addTicket" for="ticket_est_${estacionamiento.getId()}">${estacionamiento.getDescripcion()}</label>
+                                    <span class="add">+</span>
+                                </p>
+                            </c:forEach>
+                        </form>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+
+
+
         <div id="map_canvas"></div>
-        <div id="log">adwdawdawdad</div>
         <script type="text/javascript">
             var markers = [];
+            var map;
             $(document).ready(function () {
+
                 var styledMapType = new google.maps.StyledMapType(
                         [
                             {
-                                "elementType": "geometry",
+                                "featureType": "all",
+                                "elementType": "all",
                                 "stylers": [
                                     {
-                                        "color": "#1d2c4d"
-                                    }
-                                ]
-                            },
-                            {
-                                "elementType": "labels.text.fill",
-                                "stylers": [
+                                        "invert_lightness": true
+                                    },
                                     {
-                                        "color": "#8ec3b9"
-                                    }
-                                ]
-                            },
-                            {
-                                "elementType": "labels.text.stroke",
-                                "stylers": [
+                                        "saturation": 10
+                                    },
                                     {
-                                        "color": "#1a3646"
-                                    }
-                                ]
-                            },
-                            {
-                                "featureType": "administrative.country",
-                                "elementType": "geometry.stroke",
-                                "stylers": [
+                                        "lightness": 30
+                                    },
                                     {
-                                        "color": "#4b6878"
-                                    }
-                                ]
-                            },
-                            {
-                                "featureType": "administrative.land_parcel",
-                                "elementType": "labels.text.fill",
-                                "stylers": [
+                                        "gamma": 0.5
+                                    },
                                     {
-                                        "color": "#64779e"
-                                    }
-                                ]
-                            },
-                            {
-                                "featureType": "administrative.province",
-                                "elementType": "geometry.stroke",
-                                "stylers": [
-                                    {
-                                        "color": "#4b6878"
-                                    }
-                                ]
-                            },
-                            {
-                                "featureType": "landscape.man_made",
-                                "elementType": "geometry.stroke",
-                                "stylers": [
-                                    {
-                                        "color": "#334e87"
-                                    }
-                                ]
-                            },
-                            {
-                                "featureType": "landscape.natural",
-                                "elementType": "geometry",
-                                "stylers": [
-                                    {
-                                        "color": "#023e58"
-                                    }
-                                ]
-                            },
-                            {
-                                "featureType": "poi",
-                                "elementType": "geometry",
-                                "stylers": [
-                                    {
-                                        "color": "#283d6a"
-                                    }
-                                ]
-                            },
-                            {
-                                "featureType": "poi",
-                                "elementType": "labels.text.fill",
-                                "stylers": [
-                                    {
-                                        "color": "#6f9ba5"
-                                    }
-                                ]
-                            },
-                            {
-                                "featureType": "poi",
-                                "elementType": "labels.text.stroke",
-                                "stylers": [
-                                    {
-                                        "color": "#1d2c4d"
-                                    }
-                                ]
-                            },
-                            {
-                                "featureType": "poi.park",
-                                "elementType": "geometry.fill",
-                                "stylers": [
-                                    {
-                                        "color": "#023e58"
-                                    }
-                                ]
-                            },
-                            {
-                                "featureType": "poi.park",
-                                "elementType": "labels.text.fill",
-                                "stylers": [
-                                    {
-                                        "color": "#3C7680"
-                                    }
-                                ]
-                            },
-                            {
-                                "featureType": "road",
-                                "elementType": "geometry",
-                                "stylers": [
-                                    {
-                                        "color": "#304a7d"
-                                    }
-                                ]
-                            },
-                            {
-                                "featureType": "road",
-                                "elementType": "labels.text.fill",
-                                "stylers": [
-                                    {
-                                        "color": "#98a5be"
-                                    }
-                                ]
-                            },
-                            {
-                                "featureType": "road",
-                                "elementType": "labels.text.stroke",
-                                "stylers": [
-                                    {
-                                        "color": "#1d2c4d"
-                                    }
-                                ]
-                            },
-                            {
-                                "featureType": "road.highway",
-                                "elementType": "geometry",
-                                "stylers": [
-                                    {
-                                        "color": "#2c6675"
-                                    }
-                                ]
-                            },
-                            {
-                                "featureType": "road.highway",
-                                "elementType": "geometry.stroke",
-                                "stylers": [
-                                    {
-                                        "color": "#255763"
-                                    }
-                                ]
-                            },
-                            {
-                                "featureType": "road.highway",
-                                "elementType": "labels.text.fill",
-                                "stylers": [
-                                    {
-                                        "color": "#b0d5ce"
-                                    }
-                                ]
-                            },
-                            {
-                                "featureType": "road.highway",
-                                "elementType": "labels.text.stroke",
-                                "stylers": [
-                                    {
-                                        "color": "#023e58"
-                                    }
-                                ]
-                            },
-                            {
-                                "featureType": "transit",
-                                "elementType": "labels.text.fill",
-                                "stylers": [
-                                    {
-                                        "color": "#98a5be"
-                                    }
-                                ]
-                            },
-                            {
-                                "featureType": "transit",
-                                "elementType": "labels.text.stroke",
-                                "stylers": [
-                                    {
-                                        "color": "#1d2c4d"
-                                    }
-                                ]
-                            },
-                            {
-                                "featureType": "transit.line",
-                                "elementType": "geometry.fill",
-                                "stylers": [
-                                    {
-                                        "color": "#283d6a"
-                                    }
-                                ]
-                            },
-                            {
-                                "featureType": "transit.station",
-                                "elementType": "geometry",
-                                "stylers": [
-                                    {
-                                        "color": "#3a4762"
-                                    }
-                                ]
-                            },
-                            {
-                                "featureType": "water",
-                                "elementType": "geometry",
-                                "stylers": [
-                                    {
-                                        "color": "#0e1626"
-                                    }
-                                ]
-                            },
-                            {
-                                "featureType": "water",
-                                "elementType": "labels.text.fill",
-                                "stylers": [
-                                    {
-                                        "color": "#4e6d70"
+                                        "hue": "#435158"
                                     }
                                 ]
                             }
@@ -310,16 +95,15 @@
                         );
                 var latLng = new google.maps.LatLng(-33.441919, -70.651274);
                 var homeLatLng = new google.maps.LatLng(49.47805, -123.84716);
-                var map = new google.maps.Map(document.getElementById('map_canvas'), {
+                map = new google.maps.Map(document.getElementById('map_canvas'), {
                     zoom: 16,
                     center: latLng,
                     mapTypeId: google.maps.MapTypeId.ROADMAP,
-                    mapTypeControl: false
+                    mapTypeControl: false,
+                    fullscreenControl: false,
                 });
                 map.mapTypes.set('styled_map', styledMapType);
                 map.setMapTypeId('styled_map');
-
-
             <c:forEach var ="estacionamiento" items="${estacionamientos.listar()}" >
                 var marker = new MarkerWithLabel({
                     position: new google.maps.LatLng(${estacionamiento.getLatitud()},${estacionamiento.getLongitud()}),
@@ -328,25 +112,34 @@
                     map: map,
                     labelContent: "<div id='est_${estacionamiento.getId()}' class='tip'>${estacionamiento.getDescripcion()}</div>",
                     labelAnchor: new google.maps.Point(${(estacionamiento.getDescripcion().length() *9)/2}, 52),
-                    labelClass: "labels", // the CSS class for the label
+                    labelClass: "labels pointed", // the CSS class for the label
                     labelStyle: {opacity: 1.0},
                     icon: "http://media.philly.com/images/small_red.png",
                     id: ${estacionamiento.getId()}
                 });
-                
-                
+                var infowindow = new google.maps.InfoWindow({
+                    content: "<form><input class='addTicket' type='submit' value='Agregar Ticket' /></form>",
+                    pixelOffset: new google.maps.Size(0, -60)
+                });
+
+                google.maps.event.addListener(infowindow, 'closeclick', function () {
+                    deactivateMarkers();
+                });
+
+                google.maps.event.addListener(map, 'click', (function (marker) {
+                    deactivateMarkers();
+                    infowindow.close();
+                }));
+
+                google.maps.event.addListener(map, 'zoom_changed', (function (marker) {
+                    deactivateMarkers();
+                    infowindow.close();
+                }));
 
                 google.maps.event.addListener(marker, 'click', (function (marker) {
                     return function () {
-                        for (var i = 0; i < markers.length; i++) {
-                            markers[i].set("labelClass", "");
-                        }
-
-                        // set the icon for the clicked marker
-                        marker.set("labelClass", "active");
-
-                        // update the value of activeMarker
-
+                        infowindow.open(map, marker);
+                        activateMarker(marker);
                     }
                 })(marker));
 
@@ -356,15 +149,63 @@
             </c:forEach>
 
             });
-
-        </script>
-        <script>
-            $(window).on("load", (function () {
+            window.addEventListener('load', function () {
                 for (var i = 0; i < markers.length; i++) {
-                    markers[i].set("labelAnchor", new google.maps.Point(document.getElementById("est_" + markers[i].get("id")).offsetWidth / 2, 52));
+                    markers[i].set("labelAnchor", new google.maps.Point(document.getElementById("est_" + markers[i].get("id")).offsetWidth / 2 + 19, 52));
                 }
             }
-            ));
+            );
+
+            function deactivateMarkers() {
+                $(".addTicket").removeClass("estInputHovered");
+                for (var i = 0; i < markers.length; i++) {
+                    markers[i].set("labelClass", "labels pointed");
+                }
+            }
+
+            function activateMarker(marker) {
+
+                if (marker.get("labelClass") == "labels pointed active") {
+                    marker.set("labelClass", "labels pointed");
+                    $("#label_" + marker.get("id")).removeClass("estInputHovered");
+                } else {
+                    deactivateMarkers();
+                    //map.panTo(new google.maps.LatLng(marker.getPosition().lat(), marker.getPosition().lng()));
+                    marker.set("labelClass", "labels pointed active");
+                    $("#label_" + marker.get("id")).addClass("estInputHovered");
+                }
+            }
+
+            function preventSubmit(element, event) {
+                if (element == "continuar") {
+                    continuarPago();
+                    return false;
+                }
+
+                return true;
+            }
+
+            function continuarPago() {
+                $("input[name='txtRut']").val($("input[name='temp_txtRut']").val());
+                $("input[name='txtNombre']").val($("input[name='temp_txtNombre']").val());
+                $("input[name='txtTelefono']").val($("input[name='temp_txtTelefono']").val());
+                $("input[name='txtEmail']").val($("input[name='temp_txtEmail']").val());
+                
+                $("#datos-personales").slideToggle();
+                $("#datos-pago").slideToggle();
+            }
+
+            $(".addTicket").mouseenter(function () {
+                var lat = $(this).closest(".est").find(".lat").first().val();
+                var lng = $(this).closest(".est").find(".lng").first().val();
+                map.panTo(new google.maps.LatLng(lat, lng));
+                deactivateMarkers();
+                $("#est_" + $(this).closest(".est").find(".addTicketchk").first().val()).closest(".labels").addClass("active");
+            });
+
+            $(".addTicket").mouseleave(function () {
+                $("#est_" + $(this).closest(".est").find(".addTicketchk").first().val()).closest(".labels").removeClass("active");
+            });
         </script>
     </body>
 

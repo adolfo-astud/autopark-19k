@@ -7,8 +7,8 @@
 <!-- the Compile on Save feature is turned off for the project. -->
 <!-- You can turn off the Compile on Save (or Deploy on Save) setting -->
 <!-- in the project's Project Properties dialog box.-->
-<project name="WebApp_AutoPark_19K" default="default" basedir=".">
-    <description>Builds, tests, and runs the project WebApp_AutoPark_19K.</description>
+<project name="autopark-19k" default="default" basedir=".">
+    <description>Builds, tests, and runs the project autopark-19k.</description>
     <import file="nbproject/build-impl.xml"/>
     <!--
 
