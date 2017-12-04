@@ -25,7 +25,6 @@ public class BoletaDaoImp implements BoletaDao {
 
     @Override
     public boolean agregar(BoletaDto dto) {
-        
         String query = "INSERT INTO boucher(op_de_envio,forma_de_pago, total_boleta, rut_cliente) values(?,?,0,?)";
         try (Connection conexion = Conexion.getConexion()) {
             try (PreparedStatement insert = conexion.prepareStatement(query)) {
@@ -47,7 +46,7 @@ public class BoletaDaoImp implements BoletaDao {
 
     @Override
     public boolean eliminar(BoletaDto dto) {
-        String query = "DELETE FROM boucher WHERE n_boucher = ?";
+        String query = "DELETE FROM boucher WHERE n_bocheur = ?";
         try (Connection conexion = Conexion.getConexion()) {
             try (PreparedStatement delete = conexion.prepareStatement(query)) {
                 delete.setInt(1, dto.getN_boucher());
@@ -70,8 +69,6 @@ public class BoletaDaoImp implements BoletaDao {
                 + "WHERE n_boucher = ?";
         try (Connection conexion = Conexion.getConexion()) {
             try (PreparedStatement update = conexion.prepareStatement(query)) {
-                
-                
                 update.setString(1, dto.getOp_de_envio());
                 update.setString(2, dto.getForma_de_pago());
                 update.setInt(3, dto.getTotal_boleta());
@@ -87,19 +84,19 @@ public class BoletaDaoImp implements BoletaDao {
             Logger.getLogger(EstacionamientoDaoImp.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        return false;    
+        return false;
     }
 
     @Override
     public List<BoletaDto> listarPorRut(int rut) {
         String query = "SELECT * FROM ticket where rut_cliente = ?";
         try (PreparedStatement listar = Conexion.getConexion().prepareStatement(query)) {
-            listar.setInt(1,rut);
+            listar.setInt(1, rut);
             try (ResultSet rs = listar.executeQuery()) {
                 List listado = new ArrayList<BoletaDto>();
                 while (rs.next()) {
                     BoletaDto boleta = new BoletaDto();
-                    
+
                     boleta.setN_boucher(rs.getInt("n_boucher"));
                     boleta.setOp_de_envio(rs.getString("op_de_envio"));
                     boleta.setForma_de_pago(rs.getString("forma_de_pago"));
@@ -121,12 +118,27 @@ public class BoletaDaoImp implements BoletaDao {
 
     @Override
     public String descripcionBoleta(int n_boucher) {
-        
+
         String descripcion = "";
         for (DetalleTicketDto ticket : new DetalleTicketDaoImp().listarPorBoucher(n_boucher)) {
-            descripcion += new EstacionamientoDaoImp().getEstacionamiento(ticket.getId_estacionamiento()).getDescripcion() +" / " ;
+            descripcion += new EstacionamientoDaoImp().getEstacionamiento(ticket.getId_estacionamiento()).getDescripcion() + " / ";
         }
         return descripcion;
     }
-    
+
+    @Override
+    public int getUltimaBoleta() {
+        String query = "select max(n_boucher) as n_boucher from boucher";
+        try (ResultSet rs = Conexion.getConexion().prepareStatement(query).executeQuery()) {
+            if (rs.next()) {
+                return rs.getInt("n_boucher");
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(BoletaDaoImp.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("No se pudo encontrar la receta");
+        }
+
+        return 0;
+    }
+
 }

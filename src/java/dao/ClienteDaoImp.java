@@ -6,6 +6,7 @@
 package dao;
 
 import dto.ClienteDto;
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -13,17 +14,37 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import sql.Conexion;
+import sql.*;
 
 /**
  *
  * @author Serph
  */
-public class ClienteDaoImp implements ClienteDao{
+public class ClienteDaoImp implements ClienteDao {
 
     @Override
     public boolean agregar(ClienteDto dto) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if (getCliente(dto.getRut()) == null) {
+            String query = "INSERT INTO cliente(rut,nombre,telefono,email) values(?,?,?,?)";
+            try (Connection conexion = Conexion.getConexion()) {
+                try (PreparedStatement insert = conexion.prepareStatement(query)) {
+                    insert.setInt(1, dto.getRut());
+                    insert.setString(2, dto.getNombre());
+                    insert.setString(3, dto.getTelefono());
+                    insert.setString(4, dto.getEmail());
+
+                    if (insert.executeUpdate() > 0) {
+                        return true;
+                    }
+                }
+            } catch (SQLException ex) {
+                System.out.println("Problema insertando cliente: " + ex.getMessage());
+                Logger.getLogger(EstacionamientoDaoImp.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+
+        return false;
+
     }
 
     @Override
@@ -38,7 +59,7 @@ public class ClienteDaoImp implements ClienteDao{
 
     @Override
     public List<String> listarRut() {
-        try (PreparedStatement listar = Conexion.getConexion().prepareStatement( "SELECT * FROM cliente")) {
+        try (PreparedStatement listar = Conexion.getConexion().prepareStatement("SELECT * FROM cliente")) {
             try (ResultSet rs = listar.executeQuery()) {
                 List listado = new ArrayList<>();
                 while (rs.next()) {
@@ -59,11 +80,11 @@ public class ClienteDaoImp implements ClienteDao{
     public ClienteDto getCliente(int rut) {
         String query = "SELECT * FROM cliente where rut = ?";
         try (PreparedStatement buscar = Conexion.getConexion().prepareStatement(query)) {
-            buscar.setInt(1,rut);
+            buscar.setInt(1, rut);
             try (ResultSet rs = buscar.executeQuery()) {
                 if (rs.next()) {
                     ClienteDto cliente = new ClienteDto();
-                    
+
                     cliente.setRut(rut);
                     cliente.setNombre(rs.getString("nombre"));
                     cliente.setTelefono(rs.getString("telefono"));
@@ -79,5 +100,5 @@ public class ClienteDaoImp implements ClienteDao{
 
         return null;
     }
-    
+
 }

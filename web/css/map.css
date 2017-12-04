@@ -1,0 +1,54 @@
+
+#map_canvas {
+    height:100%;
+    width:100%;
+}
+
+
+.labels {
+    color:black;
+    background-color:#008cd8;
+    border-radius:3px;
+    padding:7px 7px 7px 30px;
+    text-align:center;
+    font-size: 13px;
+    color:white;
+    background-image: url('http://www.willowsigns.com/images/products/parking-icon-reflective-sign-450x450mm-RdXH.png');
+    background-size: auto 20px;
+    background-position: 5px 5px;
+    background-repeat: no-repeat;
+    box-shadow: 5px 5px 5px #0009;
+    margin: 0px 10px 10px 0;
+    position: relative;
+    white-space: nowrap;
+    overflow: initial!important;
+    text-shadow:0 0 2px black,1px 1px 1px black;
+    transition: margin 0.2s, background-color 0.2s;
+}
+
+.pointed:after {
+    top: 100%;
+    left: 50%;
+    border: solid transparent;
+    content:" ";
+    height: 0;
+    width: 0;
+    position: absolute;
+    pointer-events: none;
+    border-color: rgba(255, 255, 255, 0);
+    border-top-color:#008cd8;
+    border-width: 10px;
+    margin-left: -10px;
+    transition: 0.2s;
+
+}
+
+.pointed.active {
+    background-color:#cc3300;
+    margin-top:-60px!important;
+    text-shadow:1px 1px 1px black;
+}
+
+.pointed.active:after {
+    border-top-color:#cc3300;
+}

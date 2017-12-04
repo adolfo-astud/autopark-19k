@@ -1,0 +1,79 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 02-dic-2017, 14:08:47
+    Author     : adoha
+*/
+
+html, body {
+    height:100%;
+    width:100%;
+    margin:0;
+}
+
+body {
+    color: #bcbcbc;
+}
+
+a{
+    text-decoration: none!important;
+}
+
+.right-container{
+    position: absolute;
+    z-index: 1;
+    min-width: 400px;
+    height: auto;
+    top: 20px;
+    right: 20px;
+    background-color: #141719;
+    box-shadow: 5px 5px 5px #000000b3;
+    border: 1px solid #152c37;
+    font-size:14px;
+}
+
+.blue{
+    color: #008cd8;
+}
+
+.orange{
+    color: #cc3300;
+}
+
+h4{
+    font-weight: bold;
+    text-transform: uppercase;
+    padding: 5px 5px 5px 50px;
+    font-size: 16px;
+}
+.container-title {
+    background-repeat: no-repeat!important;
+    padding: 14px 30px;
+    background-color: #0c0e11;
+    background-position: 30px center;
+}
+
+.container-content {
+
+}
+.container-title h4 {
+    margin:0;
+}
+
+.form-control {
+    background-color: #22272a;
+    border-color: #152d37;
+    border-radius: 2px;
+    font-size:14px;
+    color: #bcbcbc;
+}
+
+.form-control:focus {
+    background-color: #22272a;
+    border-color: #152d37;
+    border-radius: 2px;
+    color:white;
+}

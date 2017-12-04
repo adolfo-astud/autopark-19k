@@ -22,13 +22,13 @@ CREATE TABLE `cliente` (
   `rut` bigint(20) NOT NULL,
   `nombre` varchar(50) NOT NULL,
   `telefono` varchar(50) NOT NULL,
-  `e-mail` varchar(50) NOT NULL,
+  `email` varchar(50) NOT NULL,
   PRIMARY KEY (`rut`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 /*Data for the table `cliente` */
 
-insert into `cliente` (`rut`,`nombre`,`telefono`,`e-mail`) values (15644658,'Diego','32165487','die@gmail.com'),(18057300,'Sebastian','12345678','sf@gmail.com'),(18326977,'adolfo','9638521','hitler@gmail.com');
+insert into `cliente` (`rut`,`nombre`,`telefono`,`email`) values (15644658,'Diego','32165487','die@gmail.com'),(18057300,'Sebastian','12345678','sf@gmail.com'),(18326977,'adolfo','9638521','hitler@gmail.com');
 
 /*Table structure for table `estacionamiento` */
 

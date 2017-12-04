@@ -7,6 +7,7 @@
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <jsp:useBean id="estacionamientos" class="dao.EstacionamientoDaoImp" />
+<jsp:useBean id="tickets" class="dao.DetalleTicketDaoImp" />
 <!DOCTYPE html>
 <html>
     <head>
@@ -38,7 +39,7 @@
                 <div id="datos-pago">
                     <div id="est_select">
                         <p>Haz click en un estacionamiento para agregar ticket.</p>
-                        <form>
+                        <form action="/autopark-19k/AgregarTicket" action="POST">
                             <input type="hidden" class="form-control" name="txtRut" placeholder="Rut (sin DV)">
                             <input type="hidden" class="form-control" name="txtNombre" placeholder="Nombre">
                             <input type="hidden" class="form-control" name="txtTelefono" placeholder="Teléfono">
@@ -48,14 +49,27 @@
                                     <input type="hidden" class="lat" value="${estacionamiento.getLatitud()}" />
                                     <input type="hidden" class="lng" value="${estacionamiento.getLongitud()}" />
                                     <input name="estacionamiento" class="addTicketchk" id="ticket_est_${estacionamiento.getId()}" type="radio" value="${estacionamiento.getId()}" />
-                                    <label onclick="this.form.submit()" id="label_${estacionamiento.getId()}"class="addTicket" for="ticket_est_${estacionamiento.getId()}">${estacionamiento.getDescripcion()}</label>
+                                    <label onclick="this.form.submit()" id="label_${estacionamiento.getId()}" class="addTicket" for="ticket_est_${estacionamiento.getId()}">${estacionamiento.getDescripcion()}</label>
                                     <span class="add">+</span>
                                 </p>
                             </c:forEach>
                         </form>
                     </div>
                 </div>
-
+                <button id="datosBoucher" onclick="this.form.submited = this.value;" value="continuar" type="submit" class="btn btn-primary btn-block">Continuar</button>
+                <div id="boucher">
+                    <c:forEach var="ticket" items="${tickets.listarPorBoucher(2)}">
+                        <p>${ticket.getN_boucher()}</p>
+                    </c:forEach>
+                    <form>
+                        <input id="transferencia" type="radio" />
+                        <label for="transferencia">Transferencia</label>
+                        <input id="en-linea" type="radio" />
+                        <label for="en-linea">Pago en Linea</label>
+                        <input id="orden-compra" type="radio" />
+                        <label for="orden-compra">Orden de Compra</label>
+                    </form>
+                </div>
             </div>
         </div>
 
@@ -190,10 +204,11 @@
                 $("input[name='txtNombre']").val($("input[name='temp_txtNombre']").val());
                 $("input[name='txtTelefono']").val($("input[name='temp_txtTelefono']").val());
                 $("input[name='txtEmail']").val($("input[name='temp_txtEmail']").val());
-                
+
                 $("#datos-personales").slideToggle();
                 $("#datos-pago").slideToggle();
             }
+
 
             $(".addTicket").mouseenter(function () {
                 var lat = $(this).closest(".est").find(".lat").first().val();
