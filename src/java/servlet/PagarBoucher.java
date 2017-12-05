@@ -6,8 +6,8 @@
 package servlet;
 
 import dao.BoletaDaoImp;
-import dao.ClienteDaoImp;
 import dao.DetalleTicketDaoImp;
+import dao.EstacionamientoDaoImp;
 import dto.BoletaDto;
 import dto.ClienteDto;
 import dto.DetalleTicketDto;
@@ -18,14 +18,13 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 /**
  *
  * @author adoha
  */
-@WebServlet(name = "AgregarTicket", urlPatterns = {"/AgregarTicket"})
-public class AgregarTicket extends HttpServlet {
+@WebServlet(name = "PagarBoucher", urlPatterns = {"/PagarBoucher"})
+public class PagarBoucher extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -40,33 +39,21 @@ public class AgregarTicket extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
-            HttpSession session = request.getSession();
-            if (((ClienteDto) session.getAttribute("cliente")) == null) {
-                    ClienteDto cliente = new ClienteDto();
-                    cliente.setRut(Integer.parseInt(request.getParameter("txtRut")));
-                    cliente.setNombre(request.getParameter("txtNombre"));
-                    cliente.setTelefono(request.getParameter("txtTelefono"));
-                    cliente.setEmail(request.getParameter("txtEmail"));
-
-                    new ClienteDaoImp().agregar(cliente);
-                    session.setAttribute("cliente", cliente);
-
-                if (new BoletaDaoImp().getBoletaNoLista(Integer.parseInt(request.getParameter("txtRut"))) == 0) {
-                    BoletaDto boleta = new BoletaDto();
-                    boleta.setForma_de_pago("temp");
-                    boleta.setOp_de_envio("temp");
-                    boleta.setRut_cliente(Integer.parseInt(request.getParameter("txtRut")));
-                    boleta.setTotal_boleta(0);
-                    new BoletaDaoImp().agregar(boleta);
-                }
+            BoletaDto boleta = new BoletaDto();
+            boleta.setForma_de_pago(request.getParameter("formaPago"));
+            boleta.setOp_de_envio(request.getParameter("envioBoleta"));
+            boleta.setRut_cliente(((ClienteDto)request.getSession().getAttribute("cliente")).getRut());
+            boleta.setN_boucher( new BoletaDaoImp().getBoletaNoLista(((ClienteDto)request.getSession().getAttribute("cliente")).getRut()));
+            int total = 0;
+            for (DetalleTicketDto ticket : new DetalleTicketDaoImp().listarPorBoucher(
+                    new BoletaDaoImp().getBoletaNoLista(((ClienteDto)request.getSession().getAttribute("cliente")).getRut()))) {
+                total += new EstacionamientoDaoImp().getEstacionamiento(ticket.getId_estacionamiento()).getMonto();
             }
 
-            DetalleTicketDto ticket = new DetalleTicketDto();
-            ticket.setId_estacionamiento(Integer.parseInt(request.getParameter("estacionamiento")));
-            ticket.setN_boucher(new BoletaDaoImp().getUltimaBoleta());
-
-            new DetalleTicketDaoImp().agregar(ticket);
-
+            boleta.setTotal_boleta(total);
+            
+            new BoletaDaoImp().modificar(boleta);
+            
             request.getRequestDispatcher("pages/PaginaPrincipal.jsp").forward(request, response);
         }
     }

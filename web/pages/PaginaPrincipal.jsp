@@ -64,21 +64,22 @@
                     <c:forEach var="ticket" items="${tickets.listarPorBoucher(boletas.getBoletaNoLista(sessionScope.cliente.getRut()))}">
                         <p>${estacionamientos.getEstacionamiento(ticket.getId_estacionamiento()).getDescripcion()} ${ticket.getN_ticket()}</p>
                     </c:forEach>
-                    <form>
+                    <form action="/autopark-19k/PagarBoucher" method="POST">
                         <p>Forma de Pago <br />
-                            <input name="formaPago" id="transferencia" type="radio" />
+                            <input name="formaPago" id="transferencia" value="Transferencia" type="radio" />
                             <label for="transferencia">Transferencia</label>
-                            <input name="formaPago" id="en-linea" type="radio" />
-                            <label for="en-linea">Pago en Linea</label>
-                            <input name="formaPago" id="orden-compra" type="radio" />
+                            <input name="formaPago" value="Pago en Línea" id="en-linea" type="radio" />
+                            <label for="en-linea">Pago en Línea</label>
+                            <input name="formaPago" value="Orden de Compra" id="orden-compra" type="radio" />
                             <label for="orden-compra">Orden de Compra</label>
                         </p>
                         <p>Envío de Boleta <br />
-                            <input name="envioBoleta" id="email" type="radio" />
-                            <label for="email">Transferencia</label>
+                            <input name="envioBoleta" value="Correo electrónico" id="email" type="radio" />
+                            <label for="email">Correo electrónico</label>
                             <input name="envioBoleta" id="particular" type="radio" />
-                            <label for="particular">Pago en Linea</label>
+                            <label for="particular" value="Dirección particular">Dirección particular</label>
                         </p>
+                        <button id="continuar" type="submit" class="btn btn-primary btn-block">pagar</button>
                     </form>
                 </div>
             </div>

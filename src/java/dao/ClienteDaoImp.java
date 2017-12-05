@@ -88,7 +88,7 @@ public class ClienteDaoImp implements ClienteDao {
                     cliente.setRut(rut);
                     cliente.setNombre(rs.getString("nombre"));
                     cliente.setTelefono(rs.getString("telefono"));
-                    cliente.setEmail(rs.getString("e-mail"));
+                    cliente.setEmail(rs.getString("email"));
 
                     return cliente;
                 }

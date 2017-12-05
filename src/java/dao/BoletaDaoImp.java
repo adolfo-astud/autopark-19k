@@ -66,7 +66,7 @@ public class BoletaDaoImp implements BoletaDao {
     @Override
     public boolean modificar(BoletaDto dto) {
         String query = "UPDATE boucher set op_de_envio = ?, forma_de_pago = ?, total_boleta = ?, rut_cliente = ?"
-                + "WHERE n_boucher = ?";
+                + " WHERE n_boucher = ?";
         try (Connection conexion = Conexion.getConexion()) {
             try (PreparedStatement update = conexion.prepareStatement(query)) {
                 update.setString(1, dto.getOp_de_envio());
