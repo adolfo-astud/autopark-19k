@@ -89,7 +89,7 @@ public class BoletaDaoImp implements BoletaDao {
 
     @Override
     public List<BoletaDto> listarPorRut(int rut) {
-        String query = "SELECT * FROM ticket where rut_cliente = ?";
+        String query = "SELECT * FROM boucher where rut_cliente = ?";
         try (PreparedStatement listar = Conexion.getConexion().prepareStatement(query)) {
             listar.setInt(1, rut);
             try (ResultSet rs = listar.executeQuery()) {

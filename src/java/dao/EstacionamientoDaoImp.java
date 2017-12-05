@@ -132,4 +132,32 @@ public class EstacionamientoDaoImp implements EstacionamientoDao {
         return null;
     }
 
+    @Override
+    public ArrayList<EstacionamientoDto> EstacionamientoPorRut(String Rut) {
+        ArrayList<EstacionamientoDto> lista = new ArrayList<>();
+        String query = "SELECT e.descripcion,e.monto FROM estacionamiento e join ticket t on(e.id_estacionamiento=t.id_estacioamiento)"
+                + " join boucher b on(t.n_boucher=b.n_boucher) "
+                + "where b.rut_cliente = ?";
+        try (PreparedStatement buscar = Conexion.getConexion().prepareStatement(query)) {
+            buscar.setString(1,Rut);
+            try (ResultSet rs = buscar.executeQuery()) {
+                while (rs.next()) {
+                    EstacionamientoDto estacionamiento = new EstacionamientoDto();
+                    
+                    estacionamiento.setDescripcion(rs.getString("descripcion"));
+                    estacionamiento.setMonto(rs.getInt("monto"));
+                    
+                    lista.add(estacionamiento);
+
+                }
+            }
+        } catch (SQLException ex) {
+            System.out.println("Problema Obteninedo estacionamiento por rut: " + ex.getMessage());
+            Logger.getLogger(EstacionamientoDaoImp.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return lista;
+        
+    }
+
 }
