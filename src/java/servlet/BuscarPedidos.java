@@ -1,9 +1,12 @@
 
 package servlet;
 
+import dao.BoletaDaoImp;
 import dao.EstacionamientoDaoImp;
+import dto.BoletaDto;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -22,10 +25,14 @@ public class BuscarPedidos extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
-            String Rut = request.getParameter("ddlRut");
-            request.setAttribute("lista", new EstacionamientoDaoImp().EstacionamientoPorRut(Rut));
-            request.getRequestDispatcher("paginas/BuscarPedidos.jsp").
-                    forward(request, response);
+                 
+            try {
+                int Rut = Integer.parseInt(request.getParameter("ddlRut"));
+                request.setAttribute("lista", new BoletaDaoImp().listarPorRut(Rut));
+            }catch (Exception w){}
+             
+            
+            request.getRequestDispatcher("pages/BuscarPedidos.jsp").forward(request, response);
         }
     }
 

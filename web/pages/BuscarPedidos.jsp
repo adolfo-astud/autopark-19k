@@ -8,7 +8,11 @@
 <%@page import="java.util.ArrayList"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<jsp:useBean id="listaRut" class="dao.ClienteDaoImp" />
+
+<jsp:useBean id="listaRut"  scope="page"  class="dao.ClienteDaoImp" />
+<jsp:useBean id="listaboletas" scope="page" class="dao.BoletaDaoImp" />
+
+
 <!DOCTYPE html>
 <html>
     <head>
@@ -17,7 +21,8 @@
     </head>
     <body>
         <h3>Buscar Pedidos</h3>
-        <form action="/autopark_19K/BuscarPedidos" method="POST">
+        
+        <form action="/autopark-19k/BuscarPedidos" method="POST">
             <table border="0">
                 
                 <tbody>
@@ -34,10 +39,8 @@
             </table>
 
         </form>
-        
-         <% ArrayList<EstacionamientoDto> lista = 
-              (ArrayList<EstacionamientoDto>)request.getAttribute("lista"); 
-        if(lista!=null){%>                     
+        <c:set var="lista" scope="request" value="${lista}" ></c:set>
+        <c:if test="${lista!=null}">                
         <table border="1">
             <thead>
                 <tr>
@@ -47,18 +50,19 @@
                 </tr>
             </thead>
             <tbody>
-                <% for(EstacionamientoDto dto: lista){ %>
+                <c:forEach var="boleta" items="${lista}" >
                     <tr>
-                        <td><%= dto.getDescripcion() %></td>
-                        <td><%= dto.getMonto() %></td>
-                        <td> <input type="submit" value="+" name="btnPedir" /></td>
+                        <td>${ listaboletas.descripcionBoleta(boleta.getN_boucher()) }</td>
+                        <td>${ boleta.getTotal_boleta() }</td>
+                        <td> <form action="//" method="POST">
+                                <input type="submit" value="+" name="btnPedir" />
+                            </form>
+                        </td>
                     </tr>
-                <% } %>    
+                </c:forEach>
             </tbody>
-        </table>
-
-        
-        <% }%>
+        </table>        
+        </c:if>  
         
     </body>
 </html>
