@@ -141,4 +141,22 @@ public class BoletaDaoImp implements BoletaDao {
         return 0;
     }
 
+    @Override
+    public int getBoletaNoLista(int rut) {
+        String query = "select n_boucher from boucher where forma_de_pago = 'temp' and rut_cliente = ?";
+        try (PreparedStatement buscar = Conexion.getConexion().prepareStatement(query)) {
+            buscar.setInt(1,rut);
+            try (ResultSet rs = buscar.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt("n_boucher");
+                }
+            }
+        } catch (SQLException ex) {
+            System.out.println("No se pudo encotnrar la boleta no lista: " + ex.getMessage());
+            Logger.getLogger(BoletaDaoImp.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return 0;
+    }
+
 }
