@@ -42,21 +42,25 @@ public class AgregarTicket extends HttpServlet {
         try (PrintWriter out = response.getWriter()) {
             HttpSession session = request.getSession();
             if (((ClienteDto) session.getAttribute("cliente")) == null) {
-                ClienteDto cliente = new ClienteDto();
-                cliente.setRut(Integer.parseInt(request.getParameter("txtRut")));
-                cliente.setNombre(request.getParameter("txtNombre"));
-                cliente.setTelefono(request.getParameter("txtTelefono"));
-                cliente.setEmail(request.getParameter("txtEmail"));
+                if (new ClienteDaoImp().getCliente(Integer.parseInt(request.getParameter("txtRut"))) == null) {
+                    ClienteDto cliente = new ClienteDto();
+                    cliente.setRut(Integer.parseInt(request.getParameter("txtRut")));
+                    cliente.setNombre(request.getParameter("txtNombre"));
+                    cliente.setTelefono(request.getParameter("txtTelefono"));
+                    cliente.setEmail(request.getParameter("txtEmail"));
 
-                new ClienteDaoImp().agregar(cliente);
-                session.setAttribute("cliente", cliente);
+                    new ClienteDaoImp().agregar(cliente);
+                    session.setAttribute("cliente", cliente);
+                }
 
-                BoletaDto boleta = new BoletaDto();
-                boleta.setForma_de_pago("temp");
-                boleta.setOp_de_envio("temp");
-                boleta.setRut_cliente(Integer.parseInt(request.getParameter("txtRut")));
-                boleta.setTotal_boleta(0);
-                new BoletaDaoImp().agregar(boleta);
+                if (new BoletaDaoImp().getBoletaNoLista(Integer.parseInt(request.getParameter("txtRut"))) == 0) {
+                    BoletaDto boleta = new BoletaDto();
+                    boleta.setForma_de_pago("temp");
+                    boleta.setOp_de_envio("temp");
+                    boleta.setRut_cliente(Integer.parseInt(request.getParameter("txtRut")));
+                    boleta.setTotal_boleta(0);
+                    new BoletaDaoImp().agregar(boleta);
+                }
             }
 
             DetalleTicketDto ticket = new DetalleTicketDto();

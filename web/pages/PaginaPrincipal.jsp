@@ -8,6 +8,8 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <jsp:useBean id="estacionamientos" class="dao.EstacionamientoDaoImp" />
 <jsp:useBean id="tickets" class="dao.DetalleTicketDaoImp" />
+<jsp:useBean id="boletas" class="dao.BoletaDaoImp" />
+
 <!DOCTYPE html>
 <html>
     <head>
@@ -59,16 +61,24 @@
                 </div>
                 <button id="datosBoucher" onclick="this.form.submited = this.value;" value="continuar" type="submit" class="btn btn-primary btn-block">Continuar</button>
                 <div id="boucher">
-                    <c:forEach var="ticket" items="${tickets.listarPorBoucher(2)}">
-                        <p>${ticket.getN_boucher()}</p>
+                    <c:forEach var="ticket" items="${tickets.listarPorBoucher(boletas.getBoletaNoLista(sessionScope.cliente.getRut()))}">
+                        <p>${estacionamientos.getEstacionamiento(ticket.getId_estacionamiento()).getDescripcion()} ${ticket.getN_ticket()}</p>
                     </c:forEach>
                     <form>
-                        <input id="transferencia" type="radio" />
-                        <label for="transferencia">Transferencia</label>
-                        <input id="en-linea" type="radio" />
-                        <label for="en-linea">Pago en Linea</label>
-                        <input id="orden-compra" type="radio" />
-                        <label for="orden-compra">Orden de Compra</label>
+                        <p>Forma de Pago <br />
+                            <input name="formaPago" id="transferencia" type="radio" />
+                            <label for="transferencia">Transferencia</label>
+                            <input name="formaPago" id="en-linea" type="radio" />
+                            <label for="en-linea">Pago en Linea</label>
+                            <input name="formaPago" id="orden-compra" type="radio" />
+                            <label for="orden-compra">Orden de Compra</label>
+                        </p>
+                        <p>Envío de Boleta <br />
+                            <input name="envioBoleta" id="email" type="radio" />
+                            <label for="email">Transferencia</label>
+                            <input name="envioBoleta" id="particular" type="radio" />
+                            <label for="particular">Pago en Linea</label>
+                        </p>
                     </form>
                 </div>
             </div>
@@ -80,6 +90,7 @@
         <div id="map_canvas"></div>
         <script type="text/javascript">
             var markers = [];
+            var infoWindows = [];
             var map;
             $(document).ready(function () {
                 if (${sessionScope.cliente != null}) {
@@ -163,6 +174,7 @@
 
 
                 markers.push(marker);
+                infoWindows.push(infowindow);
 
             </c:forEach>
 
@@ -178,6 +190,7 @@
                 $(".addTicket").removeClass("estInputHovered");
                 for (var i = 0; i < markers.length; i++) {
                     markers[i].set("labelClass", "labels pointed");
+                    infoWindows[i].close();
                 }
             }
 
