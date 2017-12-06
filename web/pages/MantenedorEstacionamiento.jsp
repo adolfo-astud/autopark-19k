@@ -38,15 +38,49 @@
                                 <input type="hidden" class="lng" value="${estacionamiento.getLongitud()}" />
                                 <input onclick="toggleDetails(this)" name="estacionamiento" class="addTicketchk" id="ticket_est_${estacionamiento.getId()}" type="radio" value="${estacionamiento.getId()}" />
                                 <label id="label_${estacionamiento.getId()}" class="addTicket" for="ticket_est_${estacionamiento.getId()}">${estacionamiento.getDescripcion()}</label>
-                                <p class="estDetails">
-                                    <b>LAT:</b> ${estacionamiento.getLatitud()}
-                                    <br/>
-                                    <b>LNG:</b> ${estacionamiento.getLongitud()}
-                                    <br/>
-                                    <b>Monto:</b> $${estacionamiento.getMonto()}
-                                    <br/>
-                                    <a href="https://www.google.com/maps/?q=${estacionamiento.getLatitud()},${estacionamiento.getLongitud()}">Ver en Google Maps</a> 
-                                </p>
+                                <div class="details-container">
+                                    <table border="0">
+                                        <tbody>
+                                            <tr>
+                                                <td><button onclick="toggleId(this)" class="btn btn-primary btn-block" id="details">Detalles</button></td>
+                                                <td><button onclick="toggleId(this)" class="btn btn-primary btn-block" id="update">Actualizar</button></td>
+                                                <td><form form action="/autopark-19k/EliminarEstacionamiento" method="POST">                                            <input type="hidden" name="cmbIdEst" value="${estacionamiento.getId()}" required/>
+                                                        <button class="btn btn-primary btn-block" id="delete">Eliminar</button></form></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    <div class="estDetails details">
+
+                                        <b>LAT:</b> ${estacionamiento.getLatitud()}
+                                        <br/>
+                                        <b>LNG:</b> ${estacionamiento.getLongitud()}
+                                        <br/>
+                                        <b>Monto:</b> $${estacionamiento.getMonto()}
+                                        <br/>
+                                        <a href="https://www.google.com/maps/?q=${estacionamiento.getLatitud()},${estacionamiento.getLongitud()}">Ver en Google Maps</a> 
+
+                                    </div>
+                                    <div class="estDetails update">
+                                        <form action="/autopark-19k/ModificarEst" method="POST">
+                                            <input type="hidden" name="cmbIdEst" value="${estacionamiento.getId()}" required/>
+                                            <p>
+                                                <input class="form-control" type="text" name="txtDescripcion" value="${estacionamiento.getDescripcion()}" placeholder="Descripción" required/>
+                                            </p>
+                                            <p>
+                                                <input class="form-control" min="0" type="number" name="txtMonto" value="${estacionamiento.getMonto()}" placeholder="Monto" required/>
+                                            </p>
+                                            <p>
+                                                <input class="form-control" type="number" step="any" name="txtLatitud" value="${estacionamiento.getLatitud()}" placeholder="Latitud" required/>
+                                            </p>
+                                            <p>
+                                                <input class="form-control" type="number" step="any" name="txtLongitud" value="${estacionamiento.getLongitud()}" placeholder="Longitud" required/>
+                                            </p>
+                                            <p>
+                                                <button type="submit" value="Modificar" name="btnGrabar" class="btn btn-primary btn-block">Actualizar</button>
+                                            </p>
+                                        </form>
+                                    </div>
+                                </div>
                             </div>
                         </c:forEach>
                     </div>
@@ -245,44 +279,17 @@
                 $("#agregar-est").slideToggle();
             }
             function toggleDetails(element) {
-                $(".estDetails").not($(element).closest(".est").find(".estDetails")).slideUp()
-                $(element).closest(".est").find(".estDetails").slideToggle();
+                $(".details-container").not($(element).closest(".est").find(".details-container")).slideUp();
+                $(element).closest(".est").find(".details-container").slideToggle();
+            }
+
+            function toggleId(element) {
+                $(element).closest(".est").find(".estDetails").not(".estDetails." + $(element).attr('id')).slideUp("fast");
+                $(element).closest(".est").find(".estDetails." + $(element).attr('id')).slideDown("fast");
+
             }
 
         </script>
-        <h4>Listado Estacionamientos</h4>
-        <table class="table table-striped" border="1">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Descripcion</th>
-                    <th>Monto</th>
-                    <th>Coordenadas</th>
-                </tr>
-            </thead>
-            <tbody>
-                <c:forEach var="Est" items="${listaEstacionamientos.listar()}" >
-                    <tr>
-                        <td><c:out value="${ Est.getId() }" /></td> 
-                        <td><c:out value="${ Est.getDescripcion()}" /></td>
-                        <td><c:out value="${ Est.getMonto() }" /></td>      
-                        <td><c:out value="${ Est.getLatitud() }" />, <c:out value="${ Est.getLongitud() }" /></td>
-                    </tr>
-                </c:forEach>
-
-            </tbody>
-        </table>        
-        <a href="/autopark-19k/pages/AgregarEst.jsp"><input type="submit" value="Nuevo" /></a>
-        <a href="/autopark-19k/pages/ModificarEst.jsp"><input type="submit" value="Modificar" /></a>
-        <form action="/autopark-19k/EliminarEstacionamiento">            
-            <input type="submit" value="Eliminar ID" name="btnEliminar" />
-            <select name="cmbIdEst">
-                <c:forEach var="Est" items="${listaEstacionamientos.listar()}">
-                    <option>${Est.getId()}</option>
-                </c:forEach>
-            </select>
-        </form>
-
         <c:set var="mensaje" scope="request" value="${mensaje}" />
         <c:if test="${mensaje != null }">
             <script>

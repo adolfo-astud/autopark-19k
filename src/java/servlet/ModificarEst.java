@@ -47,9 +47,9 @@ public class ModificarEst extends HttpServlet {
                    
             String mensaje = null;
             if (new EstacionamientoDaoImp().modificar(Est) )
-                mensaje = "Estacinamiento Modificardo";
+                mensaje = "Estacionamiento Modificado";
             else
-                mensaje = "No se pudo Modificar Estacinamiento";
+                mensaje = "No se pudo Modificar Estacionamiento";
             
             request.setAttribute("mensaje", mensaje);
             request.getRequestDispatcher("pages/MantenedorEstacionamiento.jsp").forward(request, response); 

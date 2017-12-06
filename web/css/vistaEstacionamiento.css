@@ -10,7 +10,38 @@
 .estDetails {
     padding: 20px;
     background-color: #282d30;
+
+}
+
+
+.details-container, .update {
     display:none;
+}
+
+.details-container table {
+    width: 100%;
+    text-align: center;
+}
+
+.details-container table button {
+    line-height: 10px;
+    font-size:12px;
+    font-weight: bold;
+}
+
+.details-container table button#details {
+    background-color: #144157;
+    border-color: #144157;
+}
+
+.details-container table button#update {
+    border-color: #14574e;
+    background-color: #14574e;
+}
+
+.details-container table button#delete {
+    border-color: #571414;
+    background-color: #571414;
 }
 
 .est {
