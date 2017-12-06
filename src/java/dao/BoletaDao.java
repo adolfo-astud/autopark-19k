@@ -15,6 +15,7 @@ import java.util.List;
 public interface BoletaDao extends BaseDao<BoletaDto>{
     
     public List<BoletaDto> listarPorRut(int rut);
+    public List<BoletaDto> listarListasPorRut(int rut);
     public String descripcionBoleta(int n_boucher);
     public int getUltimaBoleta();
     public int getBoletaNoLista(int rut);

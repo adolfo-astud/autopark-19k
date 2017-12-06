@@ -21,52 +21,49 @@
     </head>
     <body>
         <jsp:include page="/pages/mainMenu.jsp" />
-        
-        <h3>Buscar Pedidos</h3>
-        
-        <form action="/autopark-19k/BuscarPedidos" method="POST">
-            <table border="0">
-                
-                <tbody>
-                    <tr>
-                        <td><select name="ddlRut">
-                                <option>Rut Cliente</option>
-                                <c:forEach var="Rut" items="${listaRut.listarRut()}">
-                                <option>${Rut}</option>
-                                </c:forEach>
-                            </select></td>
-                            <td> <input type="submit" value="Buscar" name="btnBuscar" /></td>
-                    </tr>
-                </tbody>
-            </table>
+        <div class="container-main">
+            <h2>Buscar Pedidos</h2>
 
-        </form>
-        <c:set var="lista" scope="request" value="${lista}" ></c:set>
-        <c:if test="${lista!=null}">                
-        <table border="1">
-            <thead>
-                <tr>
-                    <th>Estacionamiento</th>
-                    <th>Monto</th>
-                    <th>Pedir</th>
-                </tr>
-            </thead>
-            <tbody>
-                <c:forEach var="boleta" items="${lista}" >
-                    <tr>
-                        <td>${ listaboletas.descripcionBoleta(boleta.getN_boucher()) }</td>
-                        <td>${ boleta.getTotal_boleta() }</td>
-                        <td> 
-                            <form action="/autopark-19k/EntregaDeBoleta" method="POST">
-                                <input type="hidden" name="txtN_Boleta" value="${boleta.getN_boucher()}" />
-                                <input type="submit" value="+" name="btnPedir" />
-                            </form>
-                        </td>
-                    </tr>
-                </c:forEach>
-            </tbody>
-        </table>        
-        </c:if>  
-        
+            <form action="/autopark-19k/BuscarPedidos" method="POST">
+                <table border="0">
+
+                    <tbody>
+                        <tr>
+                            <td><input type="text" class="form-control" placeholder="Ingresa RUT" name="ddlRut">
+                            </td>
+                            <td> <button type="submit" value="Buscar" name="btnBuscar" class="btn btn-primary btn-block">Buscar</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+            </form>
+            <c:set var="lista" scope="request" value="${lista}" ></c:set>
+            <c:if test="${lista!=null}">                
+                <table border="1">
+                    <thead>
+                        <tr>
+                            <th>Estacionamiento</th>
+                            <th>Monto</th>
+                            <th>Pedir</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <c:forEach var="boleta" items="${lista}" >
+                            <tr>
+                                <td>${ listaboletas.descripcionBoleta(boleta.getN_boucher()) }</td>
+                                <td>${ boleta.getTotal_boleta() }</td>
+                                <td> 
+                                    <form action="/autopark-19k/EntregaDeBoleta" method="POST">
+                                        <input type="hidden" name="txtN_Boleta" value="${boleta.getN_boucher()}" />
+                                        <input type="submit" value="+" name="btnPedir" />
+                                    </form>
+                                </td>
+                            </tr>
+                        </c:forEach>
+                    </tbody>
+                </table>        
+            </c:if>  
+        </div>
     </body>
 </html>

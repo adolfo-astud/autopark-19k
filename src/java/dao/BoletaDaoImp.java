@@ -145,7 +145,7 @@ public class BoletaDaoImp implements BoletaDao {
     public int getBoletaNoLista(int rut) {
         String query = "select n_boucher from boucher where forma_de_pago = 'temp' and rut_cliente = ?";
         try (PreparedStatement buscar = Conexion.getConexion().prepareStatement(query)) {
-            buscar.setInt(1,rut);
+            buscar.setInt(1, rut);
             try (ResultSet rs = buscar.executeQuery()) {
                 if (rs.next()) {
                     return rs.getInt("n_boucher");
@@ -163,7 +163,7 @@ public class BoletaDaoImp implements BoletaDao {
     public BoletaDto getBoleta(int n_boleta) {
         String query = "SELECT * FROM boucher where n_boucher = ?";
         try (PreparedStatement buscar = Conexion.getConexion().prepareStatement(query)) {
-            buscar.setInt(1,n_boleta);
+            buscar.setInt(1, n_boleta);
             try (ResultSet rs = buscar.executeQuery()) {
                 if (rs.next()) {
                     BoletaDto boleta = new BoletaDto();
@@ -179,6 +179,35 @@ public class BoletaDaoImp implements BoletaDao {
             }
         } catch (SQLException ex) {
             System.out.println("Problema Obteninedo boleta: " + ex.getMessage());
+            Logger.getLogger(EstacionamientoDaoImp.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return null;
+    }
+
+    @Override
+    public List<BoletaDto> listarListasPorRut(int rut) {
+        String query = "SELECT * FROM boucher where rut_cliente = ? and forma_de_pago != 'temp' and total_boleta != 0";
+        try (PreparedStatement listar = Conexion.getConexion().prepareStatement(query)) {
+            listar.setInt(1, rut);
+            try (ResultSet rs = listar.executeQuery()) {
+                List listado = new ArrayList<BoletaDto>();
+                while (rs.next()) {
+                    BoletaDto boleta = new BoletaDto();
+
+                    boleta.setN_boucher(rs.getInt("n_boucher"));
+                    boleta.setOp_de_envio(rs.getString("op_de_envio"));
+                    boleta.setForma_de_pago(rs.getString("forma_de_pago"));
+                    boleta.setTotal_boleta(rs.getInt("total_boleta"));
+                    boleta.setRut_cliente(rut);
+
+                    listado.add(boleta);
+                }
+
+                return listado;
+            }
+        } catch (SQLException ex) {
+            System.out.println("Problema listando Boleta: " + ex.getMessage());
             Logger.getLogger(EstacionamientoDaoImp.class.getName()).log(Level.SEVERE, null, ex);
         }
 

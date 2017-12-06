@@ -28,7 +28,7 @@ public class BuscarPedidos extends HttpServlet {
                  
             try {
                 int Rut = Integer.parseInt(request.getParameter("ddlRut"));
-                request.setAttribute("lista", new BoletaDaoImp().listarPorRut(Rut));
+                request.setAttribute("lista", new BoletaDaoImp().listarListasPorRut(Rut));
             }catch (Exception w){}
              
             
