@@ -5,8 +5,6 @@
  */
 package servlet;
 
-import dao.ClienteDaoImp;
-import dto.ClienteDto;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
@@ -14,14 +12,13 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 /**
  *
  * @author adoha
  */
-@WebServlet(name = "AgregarCliente", urlPatterns = {"/AgregarCliente"})
-public class AgregarCliente extends HttpServlet {
+@WebServlet(name = "Salir", urlPatterns = {"/Salir"})
+public class Salir extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -36,16 +33,8 @@ public class AgregarCliente extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
-            HttpSession session = request.getSession();
-            ClienteDto cliente = new ClienteDto();
-            cliente.setRut(Integer.parseInt(request.getParameter("txtRut")));
-            cliente.setNombre(request.getParameter("txtNombre"));
-            cliente.setTelefono(request.getParameter("txtTelefono"));
-            cliente.setEmail(request.getParameter("txtEmail"));
-
-            new ClienteDaoImp().agregar(cliente);
-            session.setAttribute("cliente", new ClienteDaoImp().getCliente(cliente.getRut()));
-
+            request.getSession().invalidate();
+            
             request.getRequestDispatcher("pages/PaginaPrincipal.jsp").forward(request, response);
         }
     }

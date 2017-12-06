@@ -40,6 +40,10 @@
     background-color: #cc3400!important;
 }
 
+.removeTicket {
+    background-image: url('http://www.iconsplace.com/icons/preview/3498db/ticket-256.png');
+}
+
 .removeTicket:hover  {
     background-color: #152c37!important;
 }

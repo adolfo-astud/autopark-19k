@@ -43,7 +43,7 @@
                 <c:if test="${sessionScope.cliente != null}">
                     <div id="datos-pago">
                         <div id="est_select">
-                            <h3>${sessionScope.cliente.getNombre()},</h3>
+                            <h3>${sessionScope.cliente.getNombre()} <a href="/autopark-19k/Salir" style="background-image: url('https://www.shareicon.net/data/128x128/2016/10/11/842380_multimedia_512x512.png');background-size: auto 100%;background-position: 0 0;color: transparent;/*! display: block; */background-repeat: no-repeat;">Exit</a></h3>
                             <p>haz click en un estacionamiento para agregar ticket.</p>
                             <form action="/autopark-19k/AgregarTicket" method="POST">
                                 <c:forEach var="estacionamiento" items="${estacionamientos.listar()}">
