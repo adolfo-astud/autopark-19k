@@ -77,3 +77,12 @@ h4{
     border-radius: 2px;
     color:white;
 }
+
+button {
+    border-radius: 0!Important;
+}
+
+.btn-primary {
+    background-color: #c30;
+    border-color: #a42900;
+}

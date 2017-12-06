@@ -1,0 +1,23 @@
+#vista-estacionamientos .container-title{
+    background-image: url('https://images.vexels.com/media/users/3/127711/isolated/preview/384e0b3361d99d9c370b4037115324b9-flat-vintage-car-icon-by-vexels.png');
+    background-size: auto 35px;
+}
+
+#datos-pago {
+    display:block;
+}
+
+.estDetails {
+    padding: 20px;
+    background-color: #282d30;
+    display:none;
+}
+
+.est {
+    margin-bottom: 15px;
+}
+
+#agregar-est{
+    display:none;
+    padding:30px;
+}
