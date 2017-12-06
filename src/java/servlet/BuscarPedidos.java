@@ -29,6 +29,9 @@ public class BuscarPedidos extends HttpServlet {
             try {
                 int Rut = Integer.parseInt(request.getParameter("ddlRut"));
                 request.setAttribute("lista", new BoletaDaoImp().listarListasPorRut(Rut));
+                if(new BoletaDaoImp().listarListasPorRut(Rut).size() == 0){
+                    request.setAttribute("mensaje", "No se encontraron pagos con ese rut.");
+                }
             }catch (Exception w){}
              
             

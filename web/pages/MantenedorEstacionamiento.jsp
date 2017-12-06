@@ -293,7 +293,7 @@
         <c:set var="mensaje" scope="request" value="${mensaje}" />
         <c:if test="${mensaje != null }">
             <script>
-                confirm("${mensaje}")
+                confirm("${mensaje}");
             </script>
         </c:if>
 

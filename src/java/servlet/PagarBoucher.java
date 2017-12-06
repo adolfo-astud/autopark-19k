@@ -40,22 +40,22 @@ public class PagarBoucher extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
             response.setContentType("text/html;charset=UTF-8");
-            
+            request.setCharacterEncoding("UTF-8");
             BoletaDto boleta = new BoletaDto();
             boleta.setForma_de_pago(request.getParameter("formaPago"));
             boleta.setOp_de_envio(request.getParameter("envioBoleta"));
-            boleta.setRut_cliente(((ClienteDto)request.getSession().getAttribute("cliente")).getRut());
-            boleta.setN_boucher( new BoletaDaoImp().getBoletaNoLista(((ClienteDto)request.getSession().getAttribute("cliente")).getRut()));
+            boleta.setRut_cliente(((ClienteDto) request.getSession().getAttribute("cliente")).getRut());
+            boleta.setN_boucher(new BoletaDaoImp().getBoletaNoLista(((ClienteDto) request.getSession().getAttribute("cliente")).getRut()));
             int total = 0;
             for (DetalleTicketDto ticket : new DetalleTicketDaoImp().listarPorBoucher(
-                    new BoletaDaoImp().getBoletaNoLista(((ClienteDto)request.getSession().getAttribute("cliente")).getRut()))) {
+                    new BoletaDaoImp().getBoletaNoLista(((ClienteDto) request.getSession().getAttribute("cliente")).getRut()))) {
                 total += new EstacionamientoDaoImp().getEstacionamiento(ticket.getId_estacionamiento()).getMonto();
             }
 
             boleta.setTotal_boleta(total);
-            
+
             new BoletaDaoImp().modificar(boleta);
-            
+
             request.setAttribute("boleta", boleta);
             request.getRequestDispatcher("pages/EntragaDeBoleta.jsp").forward(request, response);
         }

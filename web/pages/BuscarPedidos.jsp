@@ -39,8 +39,8 @@
 
             </form>
             <c:set var="lista" scope="request" value="${lista}" ></c:set>
-            <c:if test="${lista!=null}">                
-                <table border="1">
+            <c:if test="${lista.size() != 0}">                
+                <table class="table table-dark">
                     <thead>
                         <tr>
                             <th>Estacionamiento</th>
@@ -65,5 +65,11 @@
                 </table>        
             </c:if>  
         </div>
+        <c:set var="mensaje" scope="request" value="${mensaje}" />
+        <c:if test="${mensaje != null }">
+            <script>
+                alert("${mensaje}");
+            </script>
+        </c:if>
     </body>
 </html>

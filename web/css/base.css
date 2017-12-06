@@ -75,6 +75,20 @@ h4{
     text-transform: uppercase;
 }
 
+.table-dark {
+    margin-top:40px;
+    background-color: transparent;
+    color: inherit;
+}
+
+.table-dark td, .table-dark th, .table-dark thead th {
+    border-color: #152d37;
+}
+
+.table thead th {
+    color: #c30;
+    border-top: 0;
+}
 .container-main button {
     line-height: 20px;
 }
