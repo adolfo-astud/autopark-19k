@@ -43,7 +43,7 @@ public class AgregarTicket extends HttpServlet {
             response.setContentType("text/html;charset=UTF-8");
             
             HttpSession session = request.getSession();
-            if (((ClienteDto)session.getAttribute("cliente")) != null) {
+
                 if (new BoletaDaoImp().getBoletaNoLista(((ClienteDto)session.getAttribute("cliente")).getRut()) == 0) {
                     BoletaDto boleta = new BoletaDto();
                     boleta.setForma_de_pago("temp");
@@ -52,7 +52,7 @@ public class AgregarTicket extends HttpServlet {
                     boleta.setTotal_boleta(0);
                     new BoletaDaoImp().agregar(boleta);
                 }
-            }
+
 
             DetalleTicketDto ticket = new DetalleTicketDto();
             ticket.setId_estacionamiento(Integer.parseInt(request.getParameter("estacionamiento")));

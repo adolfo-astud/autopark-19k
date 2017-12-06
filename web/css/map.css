@@ -4,6 +4,9 @@
     width:100%;
 }
 
+#map_canvas > div:first-child {
+    background-color: rgb(21, 44, 55)!important;
+}
 
 .labels {
     color:black;

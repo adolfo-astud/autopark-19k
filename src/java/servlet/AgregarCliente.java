@@ -44,6 +44,7 @@ public class AgregarCliente extends HttpServlet {
             cliente.setEmail(request.getParameter("txtEmail"));
 
             new ClienteDaoImp().agregar(cliente);
+            
             session.setAttribute("cliente", new ClienteDaoImp().getCliente(cliente.getRut()));
 
             request.getRequestDispatcher("pages/PaginaPrincipal.jsp").forward(request, response);

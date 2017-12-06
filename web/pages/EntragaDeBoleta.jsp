@@ -13,53 +13,51 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <link rel="stylesheet" href="/autopark-19k/css/map.css">
+        <link rel="stylesheet" href="/autopark-19k/css/pagoTickets.css">
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Entrega de Boleta</title>
     </head>
     <body>
-        <c:set var="boleta" scope="request" value="${boleta}" ></c:set>
-        <h2>Boucher N° ${boleta.getN_boucher()}</h2>
-        
-        
-        <table border="1">
-            <thead>
-                <tr>
-                    <th>Estacionamiento</th>
-                    <th>Monto</th>
-                    <th>N° Ticket</th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                <c:forEach var="ticket" items="${tickets.listarPorBoucher(boleta.getN_boucher())}" >
-                    <tr>
-                        <td>${ estacionamientos.getEstacionamiento(ticket.getId_estacionamiento()).getDescripcion() }</td>
-                        <td>${ estacionamientos.getEstacionamiento(ticket.getId_estacionamiento()).getMonto() }</td>
-                        <td>${ ticket.getN_ticket() }</td>
-                        <td> 
-                            <form action="/autopark-19k/EliminarTicket" method="POST">                                
-                                <input type="hidden" name="txtN_ticket" value="${ticket.getN_ticket()}" />
-                                <input type="hidden" name="txtN_Boleta" value="${boleta.getN_boucher()}" />
-                                <input type="submit" value="-" name="btnEliminar" />
-                            </form>
-                        </td>
-                    </tr>
-                </c:forEach>
-            </tbody>
-        </table>
-        <h2> Total a Pagar: $ ${boleta.getTotal_boleta()}</h2>
-        <h3>Opcion de Envio: ${boleta.getOp_de_envio()}</h3>
-        
-        Muchas gracias por su preferencia.
-        
-        
-        <c:set var="mensaje" scope="request" value="${mensaje}" />
-        <c:if test="${mensaje != null }">
-            <script>
+        <jsp:include page="/pages/mainMenu.jsp" />
+        <div class="container-main">
+            <c:set var="boleta" scope="request" value="${boleta}" ></c:set>
+            <h2>Boucher N° ${boleta.getN_boucher()}</h2>
+
+
+            <p>Haz click en un ticket para removerlo.</p>
+
+            <c:forEach var="ticket" items="${tickets.listarPorBoucher(boleta.getN_boucher())}" >
+
+
+                <form action="/autopark-19k/EliminarTicket" method="POST">                                
+                    <input type="hidden" name="txtN_ticket" value="${ticket.getN_ticket()}" />
+                    <input type="hidden" name="txtN_Boleta" value="${boleta.getN_boucher()}" />
+                    <p class="tickets">
+                        <input onclick="this.form.submit()" name="ticket" class="addTicketchk" id="ticket_${ticket.getN_ticket()}" type="radio" value="${ticket.getN_ticket()}" />
+                        <label id="ticket_label_${estacionamiento.getId()}" class="removeTicket" for="ticket_${ticket.getN_ticket()}">${estacionamientos.getEstacionamiento(ticket.getId_estacionamiento()).getDescripcion()} $${estacionamientos.getEstacionamiento(ticket.getId_estacionamiento()).getMonto()} Ticket #${ticket.getN_ticket()}</label>
+                        <span class="add">-</span>
+                    </p>
+                </form>
+
+            </c:forEach>
+
+            <h4> Total a Pagar: $ ${boleta.getTotal_boleta()}</h4>
+            <h3 class="envio">Opcion de Envio: ${boleta.getOp_de_envio()}</h3>
+            <p>
+                Muchas gracias por su preferencia.
+            </p>
+            <p>
+                <a href="/autopark-19k/pages/PaginaPrincipal.jsp">Volver</a>
+            </p>
+
+            <c:set var="mensaje" scope="request" value="${mensaje}" />
+            <c:if test="${mensaje != null }">
+                <script>
                 confirm("${mensaje}")
-            </script>
-        </c:if>
-        
+                </script>
+            </c:if>
+        </div>
 
     </body>
 </html>

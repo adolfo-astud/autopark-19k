@@ -16,6 +16,7 @@ html, body {
 
 body {
     color: #bcbcbc;
+    background: #0c0e11;
 }
 
 a{
@@ -56,9 +57,31 @@ h4{
     background-position: 30px center;
 }
 
-.container-content {
-
+.container-main {
+    width: 700px;
+    margin: 150px auto 0 auto;
 }
+
+.container-main h2 {
+    text-align: center;
+    border-bottom: 3px solid #152c37;
+    padding: 20px;
+    margin-bottom: 30px;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+h3.envio{
+    text-align: left;
+    font-size: 22px;
+    font-weight: bold;
+}
+.container-main h4 {
+    border-top: 2px solid #0089d3;
+    text-align: right;
+    padding: 20px 0;
+}
+
 .container-title h4 {
     margin:0;
 }
