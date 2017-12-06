@@ -15,5 +15,6 @@ import java.util.List;
 public interface DetalleTicketDao extends BaseDao<DetalleTicketDto> {
     
     public List<DetalleTicketDto> listarPorBoucher(int n_boucher);
+    public DetalleTicketDto getTicket(int n_ticket);
     
 }

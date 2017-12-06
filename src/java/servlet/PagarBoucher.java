@@ -39,6 +39,8 @@ public class PagarBoucher extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
+            response.setContentType("text/html;charset=UTF-8");
+            
             BoletaDto boleta = new BoletaDto();
             boleta.setForma_de_pago(request.getParameter("formaPago"));
             boleta.setOp_de_envio(request.getParameter("envioBoleta"));
@@ -54,7 +56,8 @@ public class PagarBoucher extends HttpServlet {
             
             new BoletaDaoImp().modificar(boleta);
             
-            request.getRequestDispatcher("pages/PaginaPrincipal.jsp").forward(request, response);
+            request.setAttribute("boleta", boleta);
+            request.getRequestDispatcher("pages/EntragaDeBoleta.jsp").forward(request, response);
         }
     }
 

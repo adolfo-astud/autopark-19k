@@ -159,4 +159,30 @@ public class BoletaDaoImp implements BoletaDao {
         return 0;
     }
 
+    @Override
+    public BoletaDto getBoleta(int n_boleta) {
+        String query = "SELECT * FROM boucher where n_boucher = ?";
+        try (PreparedStatement buscar = Conexion.getConexion().prepareStatement(query)) {
+            buscar.setInt(1,n_boleta);
+            try (ResultSet rs = buscar.executeQuery()) {
+                if (rs.next()) {
+                    BoletaDto boleta = new BoletaDto();
+
+                    boleta.setN_boucher(n_boleta);
+                    boleta.setOp_de_envio(rs.getString("op_de_envio"));
+                    boleta.setForma_de_pago(rs.getString("forma_de_pago"));
+                    boleta.setTotal_boleta(rs.getInt("total_boleta"));
+                    boleta.setRut_cliente(rs.getInt("rut_cliente"));
+
+                    return boleta;
+                }
+            }
+        } catch (SQLException ex) {
+            System.out.println("Problema Obteninedo boleta: " + ex.getMessage());
+            Logger.getLogger(EstacionamientoDaoImp.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return null;
+    }
+
 }

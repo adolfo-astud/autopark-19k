@@ -94,5 +94,30 @@ public class DetalleTicketDaoImp implements DetalleTicketDao{
 
         return null;
     }
+
+    @Override
+    public DetalleTicketDto getTicket(int n_ticket) {
+        String query = "SELECT * FROM ticket where n_ticket = ?";
+        try (PreparedStatement buscar = Conexion.getConexion().prepareStatement(query)) {
+            buscar.setInt(1,n_ticket);
+            try (ResultSet rs = buscar.executeQuery()) {
+                if (rs.next()) {
+                    
+                    DetalleTicketDto ticket = new DetalleTicketDto();
+                    
+                    ticket.setN_ticket(n_ticket);
+                    ticket.setN_boucher(rs.getInt("n_boucher"));
+                    ticket.setId_estacionamiento(rs.getInt("Id_estacionamiento"));
+                       System.out.println("ticket con n de boleta :"+rs.getInt("n_boucher"));
+                    return ticket;
+                }
+            }
+        } catch (SQLException ex) {
+            System.out.println("Problema Obteninedo boleta: " + ex.getMessage());
+            Logger.getLogger(EstacionamientoDaoImp.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return null;
+    }
     
 }

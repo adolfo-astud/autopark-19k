@@ -30,10 +30,10 @@
             <div class="collapse" id="navbarToggleExternalContent">
                 <div class="bg-dark p-4">
                     <ul class="list-group">
-                        <li class="list-group-item"><a href="#">Inicio</a></li>
-                        <li class="list-group-item"><a href="#">Estacionamientos</a></li>
+                        <li class="list-group-item"><a href="/autopark-19k/pages/PaginaPrincipal.jsp">Inicio</a></li>
+                        <li class="list-group-item"><a href="/autopark-19k/pages/MantenedorEstacionamiento.jsp">Estacionamientos</a></li>
                         <li class="list-group-item"><a href="/autopark-19k/pages/PaginaPrincipal.jsp">Pago de Tickets</a></li>
-                        <li class="list-group-item"><a href="#">Historial de Pagos</a></li>
+                        <li class="list-group-item"><a href="/autopark-19k/pages/BuscarPedidos.jsp">Historial de Pagos</a></li>
                         <li class="list-group-item"><a href="#">Soporte</a></li>
                     </ul>
                 </div>

@@ -40,6 +40,8 @@ public class AgregarTicket extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
+            response.setContentType("text/html;charset=UTF-8");
+            
             HttpSession session = request.getSession();
             if (((ClienteDto) session.getAttribute("cliente")) == null) {
                     ClienteDto cliente = new ClienteDto();
