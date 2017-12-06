@@ -41,21 +41,12 @@ public class AgregarTicket extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
             HttpSession session = request.getSession();
-            if (((ClienteDto) session.getAttribute("cliente")) == null) {
-                    ClienteDto cliente = new ClienteDto();
-                    cliente.setRut(Integer.parseInt(request.getParameter("txtRut")));
-                    cliente.setNombre(request.getParameter("txtNombre"));
-                    cliente.setTelefono(request.getParameter("txtTelefono"));
-                    cliente.setEmail(request.getParameter("txtEmail"));
-
-                    new ClienteDaoImp().agregar(cliente);
-                    session.setAttribute("cliente", cliente);
-
-                if (new BoletaDaoImp().getBoletaNoLista(Integer.parseInt(request.getParameter("txtRut"))) == 0) {
+            if (((ClienteDto)session.getAttribute("cliente")) != null) {
+                if (new BoletaDaoImp().getBoletaNoLista(((ClienteDto)session.getAttribute("cliente")).getRut()) == 0) {
                     BoletaDto boleta = new BoletaDto();
                     boleta.setForma_de_pago("temp");
                     boleta.setOp_de_envio("temp");
-                    boleta.setRut_cliente(Integer.parseInt(request.getParameter("txtRut")));
+                    boleta.setRut_cliente(((ClienteDto)session.getAttribute("cliente")).getRut());
                     boleta.setTotal_boleta(0);
                     new BoletaDaoImp().agregar(boleta);
                 }
