@@ -28,60 +28,73 @@
                 <h4><span class="blue">Pago</span> de <span class="orange">Tickets</span></h4>
             </div>
             <div class="container-content">
-                <div id="datos-personales">
-                    <form id="pago-tickets-form" onSubmit="return preventSubmit(this.submited, event)">
-                        <p>Antes de continuar, por favor, ingresa tus datos:</p>
-                        <p><input type="number" class="form-control" name="temp_txtRut" placeholder="Rut (sin DV)"></p>
-                        <p><input  type="text" class="form-control" name="temp_txtNombre" placeholder="Nombre"></p>
-                        <p><input  type="number" class="form-control" name="temp_txtTelefono" placeholder="Teléfono"></p>
-                        <p><input type="text" class="form-control" name="temp_txtEmail" placeholder="E-mail"></p>
-                        <button id="continuar" onclick="this.form.submited = this.value;" value="continuar" type="submit" class="btn btn-primary btn-block">Continuar</button>
-                    </form>
-                </div>
-                <div id="datos-pago">
-                    <div id="est_select">
-                        Nombre: ${sessionScope.cliente.getNombre()}
-                        <p>Haz click en un estacionamiento para agregar ticket.</p>
-                        <form action="/autopark-19k/AgregarTicket" method="POST">
-                            <input type="hidden" class="form-control" name="txtRut" placeholder="Rut (sin DV)" value="${sessionScope.cliente.getRut()}">
-                            <input type="hidden" class="form-control" name="txtNombre" placeholder="Nombre">
-                            <input type="hidden" class="form-control" name="txtTelefono" placeholder="Teléfono">
-                            <input type="hidden" class="form-control" name="txtEmail" placeholder="E-mail">
-                            <c:forEach var="estacionamiento" items="${estacionamientos.listar()}">
-                                <p class="est">
-                                    <input type="hidden" class="lat" value="${estacionamiento.getLatitud()}" />
-                                    <input type="hidden" class="lng" value="${estacionamiento.getLongitud()}" />
-                                    <input onclick="this.form.submit()" name="estacionamiento" class="addTicketchk" id="ticket_est_${estacionamiento.getId()}" type="radio" value="${estacionamiento.getId()}" />
-                                    <label id="label_${estacionamiento.getId()}" class="addTicket" for="ticket_est_${estacionamiento.getId()}">${estacionamiento.getDescripcion()}</label>
-                                    <span class="add">+</span>
-                                </p>
-                            </c:forEach>
+                <c:if test="${sessionScope.cliente == null}">
+                    <div id="datos-personales">
+                        <form action="/autopark-19k/AgregarCliente" method="POST" id="pago-tickets-form">
+                            <p>Antes de continuar, por favor, ingresa tus datos:</p>
+                            <p><input required type="number" class="form-control" name="txtRut" placeholder="Rut (sin DV)"></p>
+                            <p><input required type="text" class="form-control" name="txtNombre" placeholder="Nombre"></p>
+                            <p><input required type="number" class="form-control" name="txtTelefono" placeholder="Teléfono"></p>
+                            <p><input type="text" class="form-control" name="txtEmail" placeholder="E-mail"></p>
+                            <button id="continuar" onclick="this.form.submited = this.value;" value="continuar" type="submit" class="btn btn-primary btn-block">Continuar</button>
                         </form>
                     </div>
-                </div>
-                <button id="datosBoucher" onclick="this.form.submited = this.value;" value="continuar" type="submit" class="btn btn-primary btn-block">Continuar</button>
-                <div id="boucher">
-                    <c:forEach var="ticket" items="${tickets.listarPorBoucher(boletas.getBoletaNoLista(sessionScope.cliente.getRut()))}">
-                        <p>${estacionamientos.getEstacionamiento(ticket.getId_estacionamiento()).getDescripcion()} ${ticket.getN_ticket()}</p>
-                    </c:forEach>
-                    <form action="/autopark-19k/PagarBoucher" method="POST">
-                        <p>Forma de Pago <br />
-                            <input name="formaPago" id="transferencia" value="Transferencia" type="radio" />
-                            <label for="transferencia">Transferencia</label>
-                            <input name="formaPago" value="Pago en Línea" id="en-linea" type="radio" />
-                            <label for="en-linea">Pago en Línea</label>
-                            <input name="formaPago" value="Orden de Compra" id="orden-compra" type="radio" />
-                            <label for="orden-compra">Orden de Compra</label>
-                        </p>
-                        <p>Envío de Boleta <br />
-                            <input name="envioBoleta" value="Correo electrónico" id="email" type="radio" />
-                            <label for="email">Correo electrónico</label>
-                            <input name="envioBoleta" id="particular" type="radio" />
-                            <label for="particular" value="Dirección particular">Dirección particular</label>
-                        </p>
-                        <button id="continuar" type="submit" class="btn btn-primary btn-block">pagar</button>
-                    </form>
-                </div>
+                </c:if>
+                <c:if test="${sessionScope.cliente != null}">
+                    <div id="datos-pago">
+                        <div id="est_select">
+                            <h3>${sessionScope.cliente.getNombre()},</h3>
+                            <p>haz click en un estacionamiento para agregar ticket.</p>
+                            <form action="/autopark-19k/AgregarTicket" method="POST">
+                                <c:forEach var="estacionamiento" items="${estacionamientos.listar()}">
+                                    <p class="est">
+                                        <input type="hidden" class="lat" value="${estacionamiento.getLatitud()}" />
+                                        <input type="hidden" class="lng" value="${estacionamiento.getLongitud()}" />
+                                        <input onclick="this.form.submit()" name="estacionamiento" class="addTicketchk" id="ticket_est_${estacionamiento.getId()}" type="radio" value="${estacionamiento.getId()}" />
+                                        <label id="label_${estacionamiento.getId()}" class="addTicket" for="ticket_est_${estacionamiento.getId()}">${estacionamiento.getDescripcion()}</label>
+                                        <span class="add">+</span>
+                                    </p>
+                                </c:forEach>
+                            </form>
+                        </div>
+                    </div>
+                    <button id="datosBoucher" onclick="continuarBoucher();" value="continuar" type="submit" class="btn btn-primary btn-block">Continuar a Boucher</button>
+                    <div id="boucher">
+                        <c:if test="${tickets.listarPorBoucher(boletas.getBoletaNoLista(sessionScope.cliente.getRut())).size() != 0}"> 
+                            <p>Haz click en un ticket para removerlo.</p>
+                            <c:set var="total" value="${0}"/>
+                            <form action="/autopark-19k/removerTicket" method="POST">
+                                <c:forEach var="ticket" items="${tickets.listarPorBoucher(boletas.getBoletaNoLista(sessionScope.cliente.getRut()))}">
+                                    <p class="tickets">
+                                        <input onclick="this.form.submit()" name="ticket" class="addTicketchk" id="ticket_${ticket.getN_ticket()}" type="radio" value="${ticket.getN_ticket()}" />
+                                        <label id="ticket_label_${estacionamiento.getId()}" class="removeTicket" for="ticket_${ticket.getN_ticket()}">${estacionamientos.getEstacionamiento(ticket.getId_estacionamiento()).getDescripcion()} $${estacionamientos.getEstacionamiento(ticket.getId_estacionamiento()).getMonto()} Ticket #${ticket.getN_ticket()}</label>
+                                        <span class="add">-</span>
+                                    </p>
+                                    <c:set var="total" value="${total + estacionamientos.getEstacionamiento(ticket.getId_estacionamiento()).getMonto()}"/>
+                                </c:forEach>
+                            </form>
+                            <form action="/autopark-19k/PagarBoucher" method="POST">
+                                <p>Forma de Pago <br /><br/>
+                                    <select class="form-control" name="formaPago">
+                                        <option>Transferencia</option>
+                                        <option>Pago en Línea</option>
+                                        <option>Orden de Compra</option>
+                                    </select>
+                                </p>
+                                <p>Envío de Boleta <br /><br/>
+                                    <select class="form-control" name="envioBoleta">
+                                        <option>Correo Electrónico</option>
+                                        <option>Dirección Particular</option>
+                                    </select>
+                                </p>
+                                <button type="submit" class="btn btn-primary btn-block">Pagar $${total}</button>
+                            </form>
+                        </c:if>
+                        <c:if test="${tickets.listarPorBoucher(boletas.getBoletaNoLista(sessionScope.cliente.getRut())).size() == 0}">
+                            <p>No tienes tickets pendientes. Vuelve a estacionamientos para agregar tickets.</p>
+                        </c:if>
+                    </div>
+                </c:if>
             </div>
         </div>
 
@@ -98,6 +111,10 @@
                     $("#datos-personales").hide();
                     $("#datos-pago").show();
                 }
+            <c:if test="${ticketEliminado != null}">
+                $("#datos-pago").hide();
+                $("#boucher").show();
+            </c:if>
                 var styledMapType = new google.maps.StyledMapType(
                         [
                             {
@@ -147,8 +164,9 @@
                     icon: "http://media.philly.com/images/small_red.png",
                     id: ${estacionamiento.getId()}
                 });
+                <c:if test="${sessionScope.cliente != null}">
                 var infowindow = new google.maps.InfoWindow({
-                    content: "<form><input class='addTicket' type='submit' value='Agregar Ticket' /></form>",
+                    content: "",
                     pixelOffset: new google.maps.Size(0, -60)
                 });
 
@@ -168,14 +186,17 @@
 
                 google.maps.event.addListener(marker, 'click', (function (marker) {
                     return function () {
-                        infowindow.open(map, marker);
                         activateMarker(marker);
+                        infowindow.open(map, marker);
+                        infowindow.setContent("<form action='/autopark-19k/AgregarTicket' method='POST'><input type='hidden' name='estacionamiento' value='${estacionamiento.getId()}' /><input class='addTicket' type='submit' value='Agregar Ticket' /></form>");
                     }
                 })(marker));
 
 
-                markers.push(marker);
+
                 infoWindows.push(infowindow);
+                </c:if>
+                markers.push(marker);
 
             </c:forEach>
 
@@ -239,6 +260,18 @@
             $(".addTicket").mouseleave(function () {
                 $("#est_" + $(this).closest(".est").find(".addTicketchk").first().val()).closest(".labels").removeClass("active");
             });
+
+            function continuarBoucher() {
+                if ($("#boucher").is(":hidden")) {
+                    $("#datosBoucher").html("Volver a Estacionamientos");
+                } else {
+
+                    $("#datosBoucher").html("Continuar a Boucher");
+                }
+
+                $("#datos-pago").slideToggle();
+                $("#boucher").slideToggle();
+            }
         </script>
     </body>
 

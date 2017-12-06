@@ -2,18 +2,20 @@
     background-image: url('https://i1.wp.com/gene-it.nl/wp-content/uploads/2015/12/blue-heading-icons_tickets.png?fit=600%2C600&ssl=1&w=640');
     background-size: auto 35px;
 }
-#datos-personales, #datos-pago {
+#datos-personales, #datos-pago, #boucher {
     padding:30px;
 }
-#datos-pago {
+
+
+#datos-pago, #boucher {
     display:none;
 }
 
-.est {
+.est, .tickets {
     position:relative;
 }
 
-.est label{
+.est label, .removeTicket, .addTicket{
     width:100%;
     background: #008cd8;
     padding: 10px;
@@ -34,8 +36,12 @@
     cursor:pointer;
 }
 
-.est label:hover, .estInputHovered {
+.est label:hover, .estInputHovered, .removeTicket  {
     background-color: #cc3400!important;
+}
+
+.removeTicket:hover  {
+    background-color: #152c37!important;
 }
 .add {
     opacity: 0;
@@ -50,11 +56,11 @@
     pointer-events: none;
 }
 
-.est label:hover + .add, .add:hover {
+.est label:hover + .add, .add:hover, .removeTicket:hover + .add {
     opacity: 1;
 }
 
-.est input[type=radio] {
+.est input[type=radio], .tickets input[type=radio] {
     visibility: hidden;
     position:absolute;
     margin:0;
