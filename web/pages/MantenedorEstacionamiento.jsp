@@ -16,6 +16,7 @@
         <title>Mantenedor/Grilla</title>
     </head>
     <body>
+        <jsp:include page="/pages/mainMenu.jsp" />
         <h4>Listado Estacionamientos</h4>
         <table class="table table-striped" border="1">
             <thead>

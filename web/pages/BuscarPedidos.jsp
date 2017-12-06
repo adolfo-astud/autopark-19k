@@ -20,6 +20,8 @@
         <title>JSP Page</title>
     </head>
     <body>
+        <jsp:include page="/pages/mainMenu.jsp" />
+        
         <h3>Buscar Pedidos</h3>
         
         <form action="/autopark-19k/BuscarPedidos" method="POST">
@@ -54,7 +56,9 @@
                     <tr>
                         <td>${ listaboletas.descripcionBoleta(boleta.getN_boucher()) }</td>
                         <td>${ boleta.getTotal_boleta() }</td>
-                        <td> <form action="//" method="POST">
+                        <td> 
+                            <form action="/autopark-19k/EntregaDeBoleta" method="POST">
+                                <input type="hidden" name="txtN_Boleta" value="${boleta.getN_boucher()}" />
                                 <input type="submit" value="+" name="btnPedir" />
                             </form>
                         </td>

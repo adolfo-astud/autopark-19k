@@ -18,5 +18,6 @@ public interface BoletaDao extends BaseDao<BoletaDto>{
     public String descripcionBoleta(int n_boucher);
     public int getUltimaBoleta();
     public int getBoletaNoLista(int rut);
+    public BoletaDto getBoleta(int n_boleta);
     
 }

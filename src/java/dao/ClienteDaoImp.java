@@ -25,7 +25,7 @@ public class ClienteDaoImp implements ClienteDao {
     @Override
     public boolean agregar(ClienteDto dto) {
         if (getCliente(dto.getRut()) == null) {
-            String query = "INSERT INTO cliente(rut,nombre,telefono,email) values(?,?,?,?)";
+            String query = "INSERT INTO cliente(rut,nombre,telefono,e-mail) values(?,?,?,?)";
             try (Connection conexion = Conexion.getConexion()) {
                 try (PreparedStatement insert = conexion.prepareStatement(query)) {
                     insert.setInt(1, dto.getRut());
